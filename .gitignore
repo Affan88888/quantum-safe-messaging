@@ -1,0 +1,28 @@
+# Ignore Python compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore virtual environments
+/backend/venv/
+**/venv/
+
+# Ignore IDE-specific files
+.vscode/
+.idea/
+*.sublime-project
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+
+# Ignore Node.js dependencies
+frontend/node_modules/
+
+# Ignore build artifacts
+build/
+dist/
+
+# Ignore environment variables
+.env

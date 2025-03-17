@@ -1,0 +1,11 @@
+Flask==2.3.3
+Flask-CORS==4.0.0
+mysql-connector-python==8.0.33
+PyJWT==2.7.0
+cryptography==41.0.3
+bcrypt==4.0.1
+Werkzeug==2.3.7
+Flask-DebugToolbar==0.14.0
+pytest==7.4.2
+flake8==6.1.0
+pyoqs==0.8.0
