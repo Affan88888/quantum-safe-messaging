@@ -34,10 +34,17 @@ def login():
 
     user = get_user_by_email(email)
     if user and check_password_hash(user['password_hash'], password):
+        # Generate a session key
         session_key = os.urandom(32)  # 256-bit key for AES
-        ciphertext, encapsulated_key = kem.encapsulate(session_key)
+
+        # Use the pre-initialized `kem` object from utils.helpers
+        public_key = kem.generate_keypair()
+        ciphertext, encapsulated_key = kem.encap_secret(public_key)
+
+        # Encrypt session data
         encrypted_session_data = encrypt_data(session_key, str(user['id']))
 
+        # Store session data
         session['encrypted_session_data'] = encrypted_session_data
         session['encapsulated_key'] = encapsulated_key
 
