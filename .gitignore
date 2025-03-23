@@ -25,4 +25,4 @@ build/
 dist/
 
 # Ignore environment variables
-.env
+backend/.env
