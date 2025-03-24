@@ -1,18 +1,28 @@
 // src/pages/Login.js
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Hook for navigation
 import './Login.css'; // Import the CSS file for styling
 
 const Login = () => {
   // State to manage form inputs
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate(); // Initialize the navigation hook
 
   // Handler for form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Perform login logic here (e.g., API call to Flask backend)
+
+    // Simulate authentication (replace with actual API call to Flask backend)
+    if (email === 'user@example.com' && password === 'password') {
+      // Redirect to the Main page on successful login
+      navigate('/main');
+    } else {
+      alert('Invalid email or password');
+    }
+
+    // Log the credentials for debugging purposes
     console.log('Logging in with:', { email, password });
-    alert(`Login attempted with email: ${email}`);
   };
 
   return (
