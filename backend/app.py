@@ -1,11 +1,13 @@
 # app.py
 
 from flask import Flask, session
+from flask_cors import CORS
 from routes.auth_routes import auth_bp
 from routes.user_routes import user_bp
 from config import SECRET_KEY
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/')
 def home():
