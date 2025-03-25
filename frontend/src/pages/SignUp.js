@@ -4,20 +4,45 @@ import './SignUp.css'; // Import the CSS file for styling
 
 const SignUp = () => {
   // State to manage form inputs
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
   // Handler for form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Check if passwords match
     if (password !== confirmPassword) {
       alert('Passwords do not match!');
       return;
     }
-    // Perform sign-up logic here (e.g., API call to Flask backend)
-    console.log('Signing up with:', { email, password });
-    alert(`Sign up attempted with email: ${email}`);
+
+    try {
+      // Send a POST request to the Flask backend's /signup route
+      const response = await fetch('http://localhost:5000/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, email, password }),
+      });
+
+      // Parse the response as JSON
+      const data = await response.json();
+
+      if (response.ok) {
+        // If signup is successful, show a success message
+        alert(data.message || 'User registered successfully');
+      } else {
+        // Display an error message if signup fails
+        alert(data.error || 'An error occurred during sign-up.');
+      }
+    } catch (error) {
+      console.error('Error during sign-up:', error);
+      alert('An unexpected error occurred. Please try again.');
+    }
   };
 
   return (
@@ -25,6 +50,16 @@ const SignUp = () => {
       <h1>Sign Up</h1>
       <p>Please enter your details to create an account.</p>
       <form onSubmit={handleSubmit} className="signup-form">
+        <div className="form-group">
+          <label htmlFor="username">Username:</label>
+          <input
+            type="text"
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+        </div>
         <div className="form-group">
           <label htmlFor="email">Email:</label>
           <input
