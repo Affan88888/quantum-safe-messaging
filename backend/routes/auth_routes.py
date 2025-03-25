@@ -15,11 +15,32 @@ def signup():
     email = data.get('email')
     password = data.get('password')
 
-    if not username or not email or not password:
+    if not username or not email or password:
         return jsonify({'error': 'All fields are required'}), 400
 
     if create_user(username, email, password):
-        return jsonify({'message': 'User registered successfully'}), 201
+        # Automatically log in the user after successful registration
+        user = get_user_by_email(email)
+        if user:
+            # Generate a session key
+            session_key = os.urandom(32)  # 256-bit key for AES
+
+            # Use the pre-initialized `kem` object from utils.helpers
+            public_key = kem.generate_keypair()
+            ciphertext, encapsulated_key = kem.encap_secret(public_key)
+
+            # Encrypt session data
+            encrypted_session_data = encrypt_data(session_key, str(user['id']))
+
+            # Store session data
+            session['encrypted_session_data'] = encrypted_session_data
+            session['encapsulated_key'] = encapsulated_key
+
+            # Return success response with user details
+            return jsonify({
+                'message': 'User registered successfully',
+                'user_id': user['id']
+            }), 201
     else:
         return jsonify({'error': 'Username or email already exists'}), 409
 
