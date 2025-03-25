@@ -1,6 +1,5 @@
 // src/pages/SignUp.js
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Hook for navigation
 import './SignUp.css'; // Import the CSS file for styling
 
 const SignUp = () => {
@@ -9,7 +8,6 @@ const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const navigate = useNavigate(); // Initialize the navigation hook
 
   // Handler for form submission
   const handleSubmit = async (e) => {
@@ -35,9 +33,8 @@ const SignUp = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // If signup is successful, redirect to the /main page
+        // If signup is successful, show a success message
         alert(data.message || 'User registered successfully');
-        navigate('/main'); // Redirect to the main page
       } else {
         // Display an error message if signup fails
         alert(data.error || 'An error occurred during sign-up.');
