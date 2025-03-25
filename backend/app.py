@@ -9,10 +9,6 @@ from config import SECRET_KEY
 app = Flask(__name__)
 CORS(app, supports_credentials=True, origins=["http://localhost:3000"])  # Explicitly allow your frontend origin
 
-@app.route('/')
-def home():
-    return "Flask backend is running!"
-
 # Secret key for session management
 app.secret_key = SECRET_KEY
 
