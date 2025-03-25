@@ -13,7 +13,10 @@ def dashboard():
     if not encrypted_session_data or not encapsulated_key:
         return jsonify({'error': 'Unauthorized'}), 401
 
-    session_key = kem.decapsulate(encapsulated_key)
-    user_id = decrypt_data(session_key, encrypted_session_data)
+    # Decapsulate the shared secret
+    shared_secret = kem.decap_secret(encapsulated_key)
+
+    # Decrypt the session data
+    user_id = decrypt_data(shared_secret, encrypted_session_data)
 
     return jsonify({'message': f'Welcome, user {user_id}!'})
