@@ -1,0 +1,36 @@
+POGLEDATI ZADNJI QWEN PROMPT I ODLUCITI DA LI KORISTITI USERCONTEXT ILI localStorage
+
+\\wsl$
+
+TO START PYTHON FLASK
+cd /mnt/c/Users/ADS\ Studio/Desktop/quantum-safe-messaging/backend
+source venv/bin/activate
+python app.py
+
+TO START HAPROXY
+cd quantumsafe/haproxy/  ./haproxy -f haproxy_ssl_termination.cfg &
+
+TO TEST INTEGRATION OF PYTHON FLASK AND HAPROXY
+$BUILD_DIR/bin/curl https://localhost:8043 -v -k --curves kyber512:p521_kyber1024
+
+
+ps aux | grep haproxy
+
+
+bcdedit /set hypervisorlaunchtype off
+
+bcdedit /set hypervisorlaunchtype auto
+
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+
+-For your quantum-safe messaging project, WebSockets would be a better choice because they enable instant delivery of messages between users, providing a smoother and more responsive user experience. However, implementing WebSockets requires additional setup, such as using libraries like Socket.IO (for Node.js) or integrating WebSocket support into your Flask backend.
+
+curl -X POST http://localhost:5000/api/auth/signup \
+     -H "Content-Type: application/json" \
+     -d '{"username": "testuser", "email": "test@example.com", "password": "password123"}'
+
+curl -X POST http://localhost:5000/api/auth/login \
+     -H "Content-Type: application/json" \
+     -d '{"email": "test@example.com", "password": "password123"}'
+
+flask-unsign --decode --cookie '<session_cookie_value>' --secret '<your_app_secret_key>'
