@@ -4,6 +4,7 @@ from flask import Blueprint, request, jsonify, session
 from models.user_model import create_user, get_user_by_email, check_auth_status
 from utils.helpers import encrypt_data, kem
 from werkzeug.security import check_password_hash
+import oqs
 import os
 import base64
 
@@ -35,23 +36,28 @@ def login():
 
     user = get_user_by_email(email)
     if user and check_password_hash(user['password_hash'], password):
-        # Generate a key pair for KEM
-        public_key = kem.generate_keypair()
+        # Initialize the KEM object for the client
+        kemalg = "ML-KEM-512"
+        with oqs.KeyEncapsulation(kemalg) as client:
+            # Generate the client's key pair
+            public_key_client = client.generate_keypair()
+            private_key_client = client.export_secret_key()  # Export the private key
 
-        # Encapsulate the shared secret
-        shared_secret, encapsulated_key = kem.encap_secret(public_key)
+        # Simulate the server encapsulating the shared secret
+        with oqs.KeyEncapsulation(kemalg) as server:
+            ciphertext, shared_secret_server = server.encap_secret(public_key_client)
 
         # Use the shared secret as the session key
-        session_key = shared_secret[:32]
-        print("Session key:", session_key)
-        x = b'n\xe8h2.&\xd1,Y\xa3\xd8\x8fj\x0b\xb0~\xa77\x84\xdf\xffH\xdf)\xc7\xf5\xedX\x91\x1ch\x86'
+        session_key = shared_secret_server[:32]
+        print("Session key (encryption):", session_key)
 
         # Encrypt session data
-        encrypted_session_data = encrypt_data(x, str(user['id']))
+        encrypted_session_data = encrypt_data(session_key, str(user['id']))
 
-        # Encode binary data as Base64 before storing in the session
+        # Store session data
         session['encrypted_session_data'] = base64.b64encode(encrypted_session_data).decode('utf-8')
-        session['encapsulated_key'] = base64.b64encode(encapsulated_key).decode('utf-8')
+        session['encapsulated_key'] = base64.b64encode(ciphertext).decode('utf-8')
+        session['private_key'] = private_key_client  # Store the private key securely
 
         # Return the user details along with the success message
         return jsonify({
@@ -64,7 +70,6 @@ def login():
         }), 200
     else:
         return jsonify({'error': 'Invalid email or password'}), 401
-
 @auth_bp.route('/check-auth', methods=['GET'])
 def check_auth():
     user_data = check_auth_status(session)
