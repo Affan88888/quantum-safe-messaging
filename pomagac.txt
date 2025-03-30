@@ -1,4 +1,3 @@
-POGLEDATI ZADNJI QWEN PROMPT I ODLUCITI DA LI KORISTITI USERCONTEXT ILI localStorage
 
 \\wsl$
 
@@ -34,3 +33,7 @@ curl -X POST http://localhost:5000/api/auth/login \
      -d '{"email": "test@example.com", "password": "password123"}'
 
 flask-unsign --decode --cookie '<session_cookie_value>' --secret '<your_app_secret_key>'
+
+
+auction-app .eJyrVkrNTczMUbJSSkxLS8zLTizITKnKTDZ2SAcJ6yXn5yrpKBXl56SCVKTkZuYBuaXFqUXxmSlKVobmEE5eYi5I3hFkQryji6-nn1ItAFR9HZA.Z-QpeA.4ylmYUohoKvoTOa69PwxFNBpAY0
+quantum-safe-app .eJyrVkrNS04sKC7NSSxJTYnPTq1UsqpWUkhSslLyN4lMczbwSSlzK_L1rEwtsQzIL80Jqcouq3T1Do8oDDUsDzNP9LbwTCvMtlWq1QEZVFRZADKlOLW4ODM_Lz4lsSQRblxWuEFxmqtRaGqif1pqTmReiWdimotxooV7ekV4mFeIm3taaIZ_kI9BuJEJ0LhaAPytNDs.Z-Qp1g.ILmGd_QH2zJh-WKVUpsPwHikxQY

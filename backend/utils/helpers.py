@@ -1,6 +1,7 @@
 # utils/helpers.py
 
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.backends import default_backend
 import os
 from oqs import KeyEncapsulation
@@ -9,23 +10,50 @@ from oqs import KeyEncapsulation
 kem = KeyEncapsulation("Kyber512")
 
 def encrypt_data(key, plaintext):
-    iv = os.urandom(16)  # Initialization vector
+    # Generate a random 16-byte IV
+    iv = os.urandom(16)
+
+    # Pad the plaintext using PKCS7
+    padder = padding.PKCS7(128).padder()
+    padded_plaintext = padder.update(plaintext.encode()) + padder.finalize()
+
+    print("Plaintext:", plaintext)
+    print("Padded plaintext:", padded_plaintext)
+
+    # Encrypt the padded plaintext
     cipher = Cipher(algorithms.AES(key[:32]), modes.CBC(iv), backend=default_backend())
     encryptor = cipher.encryptor()
-
-    # Pad the plaintext to match block size
-    padded_plaintext = plaintext.encode() + b"\0" * (16 - len(plaintext) % 16)
     ciphertext = encryptor.update(padded_plaintext) + encryptor.finalize()
 
-    return iv + ciphertext  # Prepend IV to ciphertext
+    print("Ciphertext:", iv + ciphertext)
+
+    # Prepend the IV to the ciphertext
+    return iv + ciphertext
 
 def decrypt_data(key, ciphertext):
-    iv = ciphertext[:16]
-    actual_ciphertext = ciphertext[16:]
-    cipher = Cipher(algorithms.AES(key[:32]), modes.CBC(iv), backend=default_backend())
-    decryptor = cipher.decryptor()
+    try:
+        # Extract the IV and actual ciphertext
+        iv = ciphertext[:16]
+        actual_ciphertext = ciphertext[16:]
 
-    padded_plaintext = decryptor.update(actual_ciphertext) + decryptor.finalize()
-    plaintext = padded_plaintext.rstrip(b"\0").decode()
+        print("IV:", iv)
+        print("Actual ciphertext:", actual_ciphertext)
 
-    return plaintext
+        # Decrypt the ciphertext
+        cipher = Cipher(algorithms.AES(key[:32]), modes.CBC(iv), backend=default_backend())
+        decryptor = cipher.decryptor()
+        padded_plaintext = decryptor.update(actual_ciphertext) + decryptor.finalize()
+
+        print("Padded plaintext:", padded_plaintext)
+
+        # Unpad the plaintext using PKCS7
+        unpadder = padding.PKCS7(128).unpadder()
+        plaintext = unpadder.update(padded_plaintext) + unpadder.finalize()
+
+        print("Decrypted plaintext:", plaintext)
+
+        # Decode the plaintext to a string
+        return plaintext.decode()
+    except Exception as e:
+        print(f"Decryption failed: {e}")
+        return None

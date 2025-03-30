@@ -1,6 +1,7 @@
 // src/pages/Login.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Hook for navigation
+import { useUser } from '../services/UserContext'; // Import the useUser hook
 import './Login.css'; // Import the CSS file for styling
 
 const Login = () => {
@@ -8,6 +9,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate(); // Initialize the navigation hook
+  const { login } = useUser(); // Get the login function from the context
 
   // Handler for form submission
   const handleSubmit = async (e) => {
@@ -17,7 +19,7 @@ const Login = () => {
       // Send a POST request to the Flask backend's /login route
       const response = await fetch('http://localhost:5000/api/auth/login', {
         method: 'POST',
-        credentials: 'include',
+        credentials: 'include', // Include cookies in the request
         headers: {
           'Content-Type': 'application/json',
         },
@@ -28,6 +30,9 @@ const Login = () => {
       const data = await response.json();
 
       if (response.ok) {
+        // Call the login function to update the context with the user data
+        login(data.user);
+
         // If login is successful, redirect to the /main page
         navigate('/main');
       } else {
