@@ -43,9 +43,6 @@ const Login = () => {
       console.error('Error during login:', error);
       alert('An unexpected error occurred. Please try again.');
     }
-
-    // Log the credentials for debugging purposes
-    console.log('Logging in with:', { email, password });
   };
 
   return (
