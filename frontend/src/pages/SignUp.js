@@ -1,15 +1,17 @@
 // src/pages/SignUp.js
 import React, { useState } from 'react';
+import { useUser } from '../services/UserContext';
+import { useNavigate } from 'react-router-dom'; // Import the navigation hook
 import './SignUp.css'; // Import the CSS file for styling
 
 const SignUp = () => {
-  // State to manage form inputs
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const { login } = useUser(); // Get the login function from the context
+  const navigate = useNavigate(); // Initialize the navigation hook
 
-  // Handler for form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -23,17 +25,23 @@ const SignUp = () => {
       // Send a POST request to the Flask backend's /signup route
       const response = await fetch('http://localhost:5000/api/auth/signup', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ username, email, password }),
       });
 
-      // Parse the response as JSON
       const data = await response.json();
 
       if (response.ok) {
-        // If signup is successful, show a success message
+        // Automatically log the user in
+        login(data.user);
+
+        // Redirect to the main page
+        navigate('/main');
+
+        // Show a success message
         alert(data.message || 'User registered successfully');
       } else {
         // Display an error message if signup fails

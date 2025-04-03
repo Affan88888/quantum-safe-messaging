@@ -17,11 +17,46 @@ def signup():
     if not all([username, email, password]):
         return jsonify({'error': 'All fields are required'}), 400
 
+    # Create the user in the database
     if create_user(username, email, password):
-        return jsonify({'message': 'User registered successfully'}), 201
+        # Simulate login by generating quantum-safe shared secret
+        kemalg = "ML-KEM-512"
+        with oqs.KeyEncapsulation(kemalg) as client:
+            # Generate the client's key pair
+            public_key_client = client.generate_keypair()
+            private_key_client = client.export_secret_key()  # Export the private key
+
+        # Simulate the server encapsulating the shared secret
+        with oqs.KeyEncapsulation(kemalg) as server:
+            ciphertext, shared_secret_server = server.encap_secret(public_key_client)
+
+        # Use the shared secret as the session key
+        session_key = shared_secret_server[:32]
+
+        # Fetch the newly created user from the database
+        user = get_user_by_email(email)
+        if not user:
+            return jsonify({'error': 'Failed to retrieve user after registration'}), 500
+
+        # Encrypt session data
+        encrypted_session_data = encrypt_data(session_key, str(user['id']))
+
+        # Store session data securely
+        session['encrypted_session_data'] = base64.b64encode(encrypted_session_data).decode('utf-8')
+        session['encapsulated_key'] = base64.b64encode(ciphertext).decode('utf-8')
+        session['private_key'] = private_key_client
+
+        # Return user details along with success message
+        return jsonify({
+            'message': 'User registered successfully',
+            'user': {
+                'id': user['id'],
+                'username': user['username'],
+                'email': user['email']
+            }
+        }), 201
     else:
         return jsonify({'error': 'Username or email already exists'}), 409
-
 
 @auth_bp.route('/login', methods=['POST'])
 def login():
