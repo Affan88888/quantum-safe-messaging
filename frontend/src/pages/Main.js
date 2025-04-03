@@ -1,10 +1,12 @@
 // src/pages/Main.js
 import React from 'react';
 import { useUser } from '../services/UserContext';
+import { useNavigate } from 'react-router-dom'; // Import the useNavigate hook
 import './Main.css';
 
 const Main = () => {
   const { user, logout } = useUser(); // Get the user state and logout function from the context
+  const navigate = useNavigate(); // Initialize the navigation hook
 
   // Function to handle logout
   const handleLogout = async () => {
@@ -13,8 +15,10 @@ const Main = () => {
         method: 'POST',
         credentials: 'include', // Include cookies for session management
       });
+
       if (response.ok) {
         logout(); // Call the logout function from the context
+        navigate('/'); // Redirect the user to the home page ("/")
       } else {
         console.error('Logout failed');
       }
