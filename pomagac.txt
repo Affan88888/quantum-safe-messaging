@@ -2,6 +2,7 @@
 
 TO START PYTHON FLASK
 cd /mnt/c/Users/ADS\ Studio/Desktop/quantum-safe-messaging/backend
+cd /mnt/c/Users/affan/Desktop/quantum-safe-messaging/backend
 source venv/bin/activate
 python app.py
 

@@ -5,9 +5,9 @@ def create_database_and_table():
     try:
         # Step 1: Connect to the MySQL server (without specifying a database)
         connection = mysql.connector.connect(
-            host='localhost',       # Replace with your MySQL host
-            user='affan',            # Replace with your MySQL username
-            password='Venvscripts333_'  # Replace with your MySQL password
+            host='localhost',       # Replace with your MySQL host (default gateway for WSL)
+            user='root',            # Replace with your MySQL username
+            password='password'  # Replace with your MySQL password
         )
 
         if connection.is_connected():
