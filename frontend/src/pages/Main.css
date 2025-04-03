@@ -34,3 +34,18 @@
   .action-button:hover {
     background-color: #0056b3;
   }
+
+  .logout-button {
+    background-color: #ff4d4d; /* Red color for logout */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+    border-radius: 5px;
+  }
+  
+  .logout-button:hover {
+    background-color: #cc0000; /* Darker red on hover */
+  }
