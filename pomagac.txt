@@ -1,6 +1,7 @@
 FIXATI HAPROXY NA LAPTOPU
 FIXATI TO STO DVA PUTA IZLAZE API PORUKE U TERMINALU
 \\wsl$
+qiskit, look up
 
 TO START PYTHON FLASK
 cd /mnt/c/Users/ADS\ Studio/Desktop/quantum-safe-messaging/backend
