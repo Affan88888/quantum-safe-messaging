@@ -1,21 +1,35 @@
 import React, { useState } from 'react';
 import { useUser } from '../services/UserContext';
 import { useNavigate } from 'react-router-dom';
+import ChatSidebar from '../components/ChatSidebar';
+import ContactSidebar from '../components/ContactSidebar';
 import './Main.css';
 
 const Main = () => {
   const { user, logout } = useUser();
   const navigate = useNavigate();
 
-  // Mock data for chats (replace this with real data fetched from your backend)
+  // Mock data for chats
   const [chats, setChats] = useState([
     { id: 1, name: 'Alice', lastMessage: 'Hey there!', timestamp: '10:30 AM' },
     { id: 2, name: 'Bob', lastMessage: 'Are we meeting today?', timestamp: '9:45 AM' },
     { id: 3, name: 'Group Chat', lastMessage: 'John: See you at 5!', timestamp: 'Yesterday' },
   ]);
 
+  // Mock data for contacts
+  const [contacts, setContacts] = useState([]);
+
   // State to track the currently selected chat
   const [selectedChat, setSelectedChat] = useState(null);
+
+  // State to toggle between "Chats" and "Contacts"
+  const [isChatSidebar, setIsChatSidebar] = useState(true);
+
+  // Function to handle adding a new contact
+  const handleAddContact = (email) => {
+    const newContact = { id: contacts.length + 1, username: email.split('@')[0], email };
+    setContacts([...contacts, newContact]);
+  };
 
   // Function to handle logout
   const handleLogout = async () => {
@@ -43,26 +57,28 @@ const Main = () => {
         {/* Welcome Message */}
         <h1>{user ? `Welcome ${user.username}!` : 'Loading...'}</h1>
 
-        <div className="sidebar-header">
-          <h2>Chats</h2>
-          <button className="new-chat-button">New Chat</button>
+        {/* Toggle Buttons */}
+        <div className="toggle-buttons">
+          <button
+            className={`toggle-button ${isChatSidebar ? 'active' : ''}`}
+            onClick={() => setIsChatSidebar(true)}
+          >
+            Chats
+          </button>
+          <button
+            className={`toggle-button ${!isChatSidebar ? 'active' : ''}`}
+            onClick={() => setIsChatSidebar(false)}
+          >
+            Contacts
+          </button>
         </div>
-        <div className="chat-list">
-          {chats.map((chat) => (
-            <div
-              key={chat.id}
-              className={`chat-item ${selectedChat?.id === chat.id ? 'selected' : ''}`}
-              onClick={() => setSelectedChat(chat)}
-            >
-              <div className="chat-avatar">{chat.name[0]}</div>
-              <div className="chat-info">
-                <div className="chat-name">{chat.name}</div>
-                <div className="last-message">{chat.lastMessage}</div>
-              </div>
-              <div className="timestamp">{chat.timestamp}</div>
-            </div>
-          ))}
-        </div>
+
+        {/* Conditional Rendering of Sidebars */}
+        {isChatSidebar ? (
+          <ChatSidebar chats={chats} selectedChat={selectedChat} setSelectedChat={setSelectedChat} />
+        ) : (
+          <ContactSidebar contacts={contacts} onAddContact={handleAddContact} />
+        )}
       </div>
 
       {/* Main Content */}
