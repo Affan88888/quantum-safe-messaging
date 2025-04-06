@@ -26,6 +26,7 @@ A quantum-safe web application for secure messaging, leveraging post-quantum cry
 3. Install backend dependencies: `pip install -r backend/requirements.txt`
 4. Clone the liboqs-python repository and install it manually.
 5. Install frontend dependencies: `cd frontend && npm install`
-6. Build HAProxy with quantum-safe OpenSSL, copy the server certificates to the certs directory, and configure HAProxy to forward traffic to the Flask backend. Start HAProxy after completing the configuration.
-7. Set up the MySQL database and ensure the backend application can connect to it. Update the database connection settings in the backend configuration if needed.
-8. Start the development server: `npm start` in \frontend and `python app.py` in \backend
+6. Create a `.env` file in \backend directory, based off of `.env.example` file.
+7. Build HAProxy with quantum-safe OpenSSL, copy the server certificates to the certs directory, and configure HAProxy to forward traffic to the Flask backend. Start HAProxy after completing the configuration.
+8. Set up the MySQL database and ensure the backend application can connect to it. Update the database connection settings in the backend configuration if needed. Then run `python mySQL.py` in \backend.
+9. Start the development server: `npm start` in \frontend and `python app.py` in \backend.
