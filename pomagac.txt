@@ -1,8 +1,8 @@
--pogledati zadnja 2 qwen odgovora
+-KRENUTI IMPLEMENTIRATI WEBSOCKETS
 -NAPRAVITI HAPROXY DA RADI SKROZ
 -FIXATI HAPROXY NA LAPTOPU
--KRENUTI IMPLEMENTIRATI WEBSOCKETS
--NAPRAVITI DOBAR README FILE ZA INSTALACIJU CITAVOG SETUPA
+-PROMIJENITI PASSWORD HASHING FUNKCIONALNOST The most secure option for password hashing in a post-quantum-focused application is Argon2 , combined with a hybrid approach that integrates post-quantum cryptographic primitives like Kyber.
+-MAYBE IMPLEMENT ZERO TRUST ARCHITECTURE?
 -qiskit, look up
 
 \\wsl$
