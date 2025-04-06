@@ -7,7 +7,7 @@ def create_database_and_table():
         connection = mysql.connector.connect(
             host='localhost',       # Replace with your MySQL host (default gateway for WSL)
             user='root',            # Replace with your MySQL username
-            password='password'  # Replace with your MySQL password
+            password='password'     # Replace with your MySQL password
         )
 
         if connection.is_connected():
@@ -25,7 +25,7 @@ def create_database_and_table():
             print("Using database 'quantum_safe_messaging'.")
 
             # Step 5: Create the 'users' table
-            create_table_query = """
+            create_users_table_query = """
             CREATE TABLE IF NOT EXISTS users (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 username VARCHAR(255) NOT NULL UNIQUE,
@@ -34,14 +34,54 @@ def create_database_and_table():
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
             """
-            cursor.execute(create_table_query)
+            cursor.execute(create_users_table_query)
             print("Table 'users' created or already exists.")
+
+            # Step 6: Create the 'chats' table
+            create_chats_table_query = """
+            CREATE TABLE IF NOT EXISTS chats (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(255), -- Optional: For naming group chats
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+            """
+            cursor.execute(create_chats_table_query)
+            print("Table 'chats' created or already exists.")
+
+            # Step 7: Create the 'chat_participants' table
+            create_chat_participants_table_query = """
+            CREATE TABLE IF NOT EXISTS chat_participants (
+                chat_id INT NOT NULL,
+                user_id INT NOT NULL,
+                joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (chat_id, user_id),
+                FOREIGN KEY (chat_id) REFERENCES chats(id) ON DELETE CASCADE,
+                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+            );
+            """
+            cursor.execute(create_chat_participants_table_query)
+            print("Table 'chat_participants' created or already exists.")
+
+            # Step 8: Create the 'messages' table
+            create_messages_table_query = """
+            CREATE TABLE IF NOT EXISTS messages (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                chat_id INT NOT NULL,
+                sender_id INT NOT NULL,
+                content TEXT NOT NULL, -- The text content of the message
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (chat_id) REFERENCES chats(id) ON DELETE CASCADE,
+                FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE
+            );
+            """
+            cursor.execute(create_messages_table_query)
+            print("Table 'messages' created or already exists.")
 
     except Error as e:
         print(f"Error: {e}")
 
     finally:
-        # Step 6: Close the cursor and connection
+        # Step 9: Close the cursor and connection
         if connection.is_connected():
             cursor.close()
             connection.close()
