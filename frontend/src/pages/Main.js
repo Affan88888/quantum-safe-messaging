@@ -40,6 +40,9 @@ const Main = () => {
     <div className="main-container">
       {/* Sidebar */}
       <div className="sidebar">
+        {/* Welcome Message */}
+        <h1>{user ? `Welcome ${user.username}!` : 'Loading...'}</h1>
+
         <div className="sidebar-header">
           <h2>Chats</h2>
           <button className="new-chat-button">New Chat</button>
