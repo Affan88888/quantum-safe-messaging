@@ -77,11 +77,26 @@ def create_database_and_table():
             cursor.execute(create_messages_table_query)
             print("Table 'messages' created or already exists.")
 
+            # Step 9: Create the 'user_contacts' table
+            create_user_contacts_table_query = """
+            CREATE TABLE IF NOT EXISTS user_contacts (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                user_id INT NOT NULL,
+                contact_id INT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+                FOREIGN KEY (contact_id) REFERENCES users(id) ON DELETE CASCADE,
+                UNIQUE (user_id, contact_id) -- Ensures no duplicate contacts for the same user
+            );
+            """
+            cursor.execute(create_user_contacts_table_query)
+            print("Table 'user_contacts' created or already exists.")
+
     except Error as e:
         print(f"Error: {e}")
 
     finally:
-        # Step 9: Close the cursor and connection
+        # Step 10: Close the cursor and connection
         if connection.is_connected():
             cursor.close()
             connection.close()

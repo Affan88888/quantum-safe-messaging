@@ -1,22 +1,60 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './ContactSidebar.css';
 
 const ContactSidebar = ({ contacts, onAddContact }) => {
-  const [newContactEmail, setNewContactEmail] = React.useState('');
+  const [newContactEmail, setNewContactEmail] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleAddContact = () => {
-    if (newContactEmail.trim()) {
-      onAddContact(newContactEmail);
-      setNewContactEmail('');
+  // Function to handle opening the modal
+  const openModal = () => {
+    setIsModalOpen(true);
+    setErrorMessage('');
+  };
+
+  // Function to handle closing the modal
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setNewContactEmail('');
+    setErrorMessage('');
+  };
+
+  // Function to handle adding a contact
+  const handleAddContact = async () => {
+    if (!newContactEmail.trim()) {
+      setErrorMessage('Please enter a valid email.');
+      return;
+    }
+
+    try {
+      // Simulate an API call to validate the email
+      const response = await fetch('/api/users/check-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: newContactEmail }),
+      });
+
+      const data = await response.json();
+
+      if (data.exists) {
+        // Add the contact if the email exists
+        onAddContact(newContactEmail);
+        closeModal();
+      } else {
+        // Show an error message if the email does not exist
+        setErrorMessage('User with this email does not exist.');
+      }
+    } catch (error) {
+      console.error('Error checking email:', error);
+      setErrorMessage('An error occurred while checking the email.');
     }
   };
 
-  
   return (
     <div className="contact-sidebar">
       <div className="sidebar-header">
         <h2>Contacts</h2>
-        <button className="add-contact-button" onClick={handleAddContact}>
+        <button className="add-contact-button" onClick={openModal}>
           Add Contact
         </button>
       </div>
@@ -35,17 +73,30 @@ const ContactSidebar = ({ contacts, onAddContact }) => {
           <div className="no-contacts">No contacts added yet.</div>
         )}
       </div>
-      <div className="add-contact-input">
-        <input
-          type="email"
-          value={newContactEmail}
-          onChange={(e) => setNewContactEmail(e.target.value)}
-          placeholder="Enter contact email"
-        />
-        <button className="add-button" onClick={handleAddContact}>
-          Add
-        </button>
-      </div>
+
+      {/* Modal for Adding a Contact */}
+      {isModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>Add New Contact</h3>
+            <input
+              type="email"
+              value={newContactEmail}
+              onChange={(e) => setNewContactEmail(e.target.value)}
+              placeholder="Enter contact email"
+            />
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
+            <div className="modal-buttons">
+              <button className="cancel-button" onClick={closeModal}>
+                Cancel
+              </button>
+              <button className="add-button" onClick={handleAddContact}>
+                Add
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

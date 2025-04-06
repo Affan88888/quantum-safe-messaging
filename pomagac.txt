@@ -1,4 +1,5 @@
 -KRENUTI IMPLEMENTIRATI WEBSOCKETS
+-POGLEDATI ZADNJI QWEN ODGOVOR I ZAVRSITI IMPLEMENTACIJU DA SE DODA CONTACT
 -NAPRAVITI HAPROXY DA RADI SKROZ
 -FIXATI HAPROXY NA LAPTOPU
 -PROMIJENITI PASSWORD HASHING FUNKCIONALNOST The most secure option for password hashing in a post-quantum-focused application is Argon2 , combined with a hybrid approach that integrates post-quantum cryptographic primitives like Kyber.
