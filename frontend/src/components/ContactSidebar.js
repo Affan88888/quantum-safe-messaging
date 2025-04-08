@@ -28,8 +28,9 @@ const ContactSidebar = ({ contacts, onAddContact }) => {
 
     try {
       // Simulate an API call to validate the email
-      const response = await fetch('/api/users/check-email', {
+      const response = await fetch('http://localhost:5000/api/contact/check-email', {
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: newContactEmail }),
       });
