@@ -1,32 +1,209 @@
 /* src/pages/HomePage.css */
 
-.container {
-    max-width: 800px;
-    margin: 50px auto;
-    padding: 20px;
-    text-align: center;
-    font-family: Arial, sans-serif;
-  }
+.welcome-page {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+.welcome-page .overlap-wrapper {
+  background-color: #ffffff;
+  height: 1200px;
+  width: 1920px;
   
-  .features {
-    margin: 20px 0;
-  }
-  
-  .cta {
-    margin-top: 30px;
-  }
-  
-  .button {
-    display: inline-block;
-    margin: 10px;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .button:hover {
-    background-color: #0056b3;
-  }
+}
+
+.welcome-page .overlap {
+  height: 1200px;
+  position: relative;
+}
+
+.welcome-page .rectangle {
+  background-color: #cacaca;
+  height: 400px;
+  left: 0;
+  position: absolute;
+  top: 800px;
+  width: 1920px;
+}
+
+.welcome-page .div {
+  background-color: #cacaca;
+  height: 800px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 1920px;
+}
+
+.welcome-page .vecteezy {
+  height: 1118px;
+  left: 1px;
+  object-fit: cover;
+  position: absolute;
+  top: 82px;
+  width: 1917px;
+}
+
+.welcome-page .rectangle-2 {
+  background-color: #fba400;
+  border-radius: 50px;
+  height: 300px;
+  left: 135px;
+  position: absolute;
+  top: 850px;
+  width: 1200px;
+}
+
+.welcome-page .image {
+  height: 205px;
+  left: 30px;
+  object-fit: cover;
+  position: absolute;
+  top: 385px;
+  width: 205px;
+}
+
+.welcome-page .button {
+  border: 5px solid;
+  border-color: #ffffff;
+  border-radius: 10px;
+  height: 110px;
+  left: 755px;
+  position: absolute;
+  top: 500px;
+  width: 310px;
+}
+
+.welcome-page .overlap-group {
+  background-color: #fba400;
+  border-radius: 10px;
+  height: 100px;
+  position: relative;
+  width: 300px;
+}
+
+.welcome-page .text-wrapper {
+  color: #ffffff;
+  font-family: "Inter-SemiBold", Helvetica;
+  font-size: 55px;
+  font-weight: 600;
+  height: 64px;
+  left: 10px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 18px;
+  white-space: nowrap;
+  width: 210px;
+}
+
+.welcome-page .arrow-left {
+  height: 60px !important;
+  left: 230px !important;
+  position: absolute !important;
+  top: 22px !important;
+  width: 60px !important;
+}
+
+.welcome-page .overlap-group-wrapper {
+  border: 5px solid;
+  border-color: #ffffff;
+  border-radius: 10px;
+  height: 110px;
+  left: 345px;
+  position: absolute;
+  top: 500px;
+  width: 310px;
+}
+
+.welcome-page .text-wrapper-2 {
+  color: #ffffff;
+  font-family: "Inter-SemiBold", Helvetica;
+  font-size: 55px;
+  font-weight: 600;
+  height: 64px;
+  left: 10px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 18px;
+  white-space: nowrap;
+  width: 188px;
+}
+
+.welcome-page .welcome-to-quanttalk {
+  color: transparent;
+  font-family: "Inter-SemiBold", Helvetica;
+  font-size: 65px;
+  font-weight: 600;
+  height: 116px;
+  left: 150px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 41px;
+}
+
+.welcome-page .span {
+  color: #000000;
+}
+
+.welcome-page .text-wrapper-3 {
+  color: #fba400;
+}
+
+.welcome-page .endtoend-encryption {
+  color: #ffffff;
+  font-family: "Inter-SemiBold", Helvetica;
+  font-size: 40px;
+  font-weight: 600;
+  height: 261px;
+  left: 137px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  text-align: center;
+  top: 870px;
+  width: 1195px;
+}
+
+.welcome-page .your-secure {
+  color: #000000;
+  font-family: "Inter-SemiBold", Helvetica;
+  font-size: 48px;
+  font-weight: 600;
+  height: 47px;
+  left: 190px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 210px;
+  white-space: nowrap;
+  width: 1140px;
+}
+
+.welcome-page .get-started {
+  color: #000000;
+  font-family: "Inter-SemiBold", Helvetica;
+  font-size: 64px;
+  font-weight: 600;
+  height: 82px;
+  left: 500px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 350px;
+  width: 385px;
+}
+
+welcome-page .vecteezy {
+  height: 1118px;
+  left: 1px;
+  object-fit: cover;
+  position: absolute;
+  top: 82px;
+  width: 1917px;
+}
