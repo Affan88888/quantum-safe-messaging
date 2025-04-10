@@ -1,3 +1,4 @@
+// src/pages/Main.js
 import React, { useState } from 'react';
 import { useUser } from '../services/UserContext';
 import { useNavigate } from 'react-router-dom';
