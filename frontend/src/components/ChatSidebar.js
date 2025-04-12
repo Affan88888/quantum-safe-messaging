@@ -1,3 +1,4 @@
+// src/components/ChatSidebar.js
 import React from 'react';
 import './ChatSidebar.css';
 

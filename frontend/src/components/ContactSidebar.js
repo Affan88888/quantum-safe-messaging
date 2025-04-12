@@ -1,10 +1,35 @@
-import React, { useState } from 'react';
+// src/components/ContactSidebar.js
+import React, { useState, useEffect } from 'react';
 import './ContactSidebar.css';
 
-const ContactSidebar = ({ contacts, onAddContact }) => {
+const ContactSidebar = ({ onAddContact }) => {
   const [newContactEmail, setNewContactEmail] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [contacts, setContacts] = useState([]); // State to hold the list of contacts
+
+  // Fetch contacts when the component mounts
+  useEffect(() => {
+    const fetchContacts = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/contact/get-contact-list', {
+          method: 'GET',
+          credentials: 'include', // Include cookies/sessions for authentication
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch contacts');
+        }
+
+        const data = await response.json();
+        setContacts(data.contacts || []); // Update the contacts state with the fetched data
+      } catch (error) {
+        console.error('Error fetching contacts:', error);
+      }
+    };
+
+    fetchContacts();
+  }, []); // Empty dependency array ensures this runs only once on mount
 
   // Function to handle opening the modal
   const openModal = () => {
@@ -39,7 +64,16 @@ const ContactSidebar = ({ contacts, onAddContact }) => {
 
       if (data.exists) {
         // Add the contact if the email exists
-        onAddContact(newContactEmail);
+        const updatedResponse = await fetch('http://localhost:5000/api/contact/get-contact-list', {
+          method: 'GET',
+          credentials: 'include',
+        });
+
+        if (updatedResponse.ok) {
+          const updatedData = await updatedResponse.json();
+          setContacts(updatedData.contacts || []); // Update the contacts state with the new list
+        }
+
         closeModal();
       } else {
         // Show an error message if the email does not exist

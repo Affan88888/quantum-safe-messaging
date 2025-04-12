@@ -26,3 +26,33 @@ def add_contact_to_user(user_id, contact_id):
     finally:
         cursor.close()
         connection.close()
+
+
+def get_contacts_for_user(user_id):
+    """
+    Retrieve the list of contacts for the given user_id.
+    Returns a list of contact details (id, username, email).
+    """
+    connection = get_db_connection()
+    if not connection:
+        return []
+
+    try:
+        cursor = connection.cursor(dictionary=True)  # Use dictionary=True for easier JSON serialization
+        query = """
+        SELECT c.id, c.username, c.email
+        FROM user_contacts uc
+        JOIN users c ON uc.contact_id = c.id
+        WHERE uc.user_id = %s
+        """
+        cursor.execute(query, (user_id,))
+        contacts = cursor.fetchall()  # Fetch all matching contacts
+        return contacts
+
+    except Exception as e:
+        print(f"Error fetching contact list: {e}")
+        return []
+
+    finally:
+        cursor.close()
+        connection.close()
