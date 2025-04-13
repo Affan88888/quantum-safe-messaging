@@ -35,20 +35,20 @@ body::before {
   text-align: center;
 }
 
-/* Hover Effect for All Text */
-h1,
-h2,
-p,
-li,
-a {
+/* Hover Effect for Text - Scoped to HomePage */
+.container h1,
+.container h2,
+.container p,
+.container li,
+.container a {
   transition: transform 0.3s ease-in-out; /* Smooth transition for hover effect */
 }
 
-h1:hover,
-h2:hover,
-p:hover,
-li:hover,
-a:hover {
+.container h1:hover,
+.container h2:hover,
+.container p:hover,
+.container li:hover,
+.container a:hover {
   transform: translateY(-5px); /* Move text up slightly on hover */
 }
 

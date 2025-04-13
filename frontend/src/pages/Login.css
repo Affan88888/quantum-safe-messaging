@@ -5,14 +5,17 @@
     margin: 50px auto;
     padding: 20px;
     text-align: center;
-    font-family: Arial, sans-serif;
   }
   
-  h1 {
-    margin-bottom: 20px;
+.login-container h1 {
+    margin-bottom: 20px;  
+    transition: transform 0.3s ease-in-out;
+  }
+.login-container h1:hover {
+    transform: translateY(-5px);
   }
   
-  p {
+.login-container p {
     margin-bottom: 30px;
   }
   
@@ -26,13 +29,13 @@
     text-align: left;
   }
   
-  label {
+.login-container label {
     font-weight: bold;
     margin-bottom: 5px;
     display: block;
   }
   
-  input {
+.login-container input {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
@@ -51,6 +54,7 @@
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    font-family: 'Orbitron';
   }
   
   .login-button:hover {
