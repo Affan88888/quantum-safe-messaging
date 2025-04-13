@@ -73,3 +73,30 @@
   .signup-link a:hover {
     text-decoration: underline;
   }
+
+  .home-button {
+    display: inline-flex; /* Use flexbox for better alignment */
+    align-items: center; /* Align items vertically */
+    justify-content: center; /* Center items horizontally */
+    width: 100%;
+    padding: 10px;
+    background-color: #5a6268;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-family: 'Orbitron';
+    margin-top: 10px; /* Add spacing between the signup link and this button */
+    gap: 10px; /* Add spacing between the icon and text */
+  }
+  
+  .home-button:hover {
+    background-color: #343a40; /* Darker green on hover */
+  }
+  
+  /* Style the Font Awesome icon */
+  .home-button i {
+    font-size: 18px; /* Slightly larger icon */
+  }

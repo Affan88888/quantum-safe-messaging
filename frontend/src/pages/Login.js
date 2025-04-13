@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Hook for navigation
 import { useUser } from '../services/UserContext'; // Import the useUser hook
 import './Login.css'; // Import the CSS file for styling
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const Login = () => {
   // State to manage form inputs
@@ -77,6 +78,9 @@ const Login = () => {
       <p className="signup-link">
         Don't have an account? <a href="/signup">Sign up here</a>.
       </p>
+      <button className="home-button" onClick={() => navigate('/')}>
+        <i className="fas fa-arrow-left"></i>Back to Home Page
+      </button>
     </div>
   );
 };

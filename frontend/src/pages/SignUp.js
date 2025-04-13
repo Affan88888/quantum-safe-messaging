@@ -105,6 +105,9 @@ const SignUp = () => {
       <p className="login-link">
         Already have an account? <a href="/login">Log in here</a>.
       </p>
+      <button className="home-button" onClick={() => navigate('/')}>
+        <i className="fas fa-arrow-left"></i>Back to Home Page
+      </button>
     </div>
   );
 };
