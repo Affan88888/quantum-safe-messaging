@@ -44,6 +44,34 @@ def decrypt_data(key, ciphertext):
         print(f"Decryption failed: {e}")
         return None
 
+def encrypt_session(user_id, public_key_client):
+    """
+    Encrypts session data using quantum-safe shared secret generation.
+
+    Args:
+        user_id (str): The ID of the user to be encrypted.
+        public_key_client (bytes): The client's public key for shared secret generation.
+
+    Returns:
+        dict: Encrypted session data including ciphertext, private key, and encrypted user ID.
+    """
+    # Simulate the server encapsulating the shared secret
+    kemalg = "ML-KEM-512"
+    with oqs.KeyEncapsulation(kemalg) as server:
+        ciphertext, shared_secret_server = server.encap_secret(public_key_client)
+
+    # Use the shared secret as the session key
+    session_key = shared_secret_server[:32]
+
+    # Encrypt the user ID using the session key
+    encrypted_session_data = encrypt_data(session_key, str(user_id))
+
+    # Return the encrypted session data
+    return {
+        'encrypted_session_data': base64.b64encode(encrypted_session_data).decode('utf-8'),
+        'encapsulated_key': base64.b64encode(ciphertext).decode('utf-8')
+    }
+
 def decrypt_session(session):
     """
     Decrypts the session data to retrieve the user_id.

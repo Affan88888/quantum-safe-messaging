@@ -1,9 +1,8 @@
 from flask import Blueprint, request, jsonify, session
 from models.user_model import create_user, get_user_by_email, check_auth_status
-from utils.helpers import encrypt_data
+from utils.helpers import encrypt_session
 from werkzeug.security import check_password_hash
 import oqs
-import base64
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -19,31 +18,23 @@ def signup():
 
     # Create the user in the database
     if create_user(username, email, password):
-        # Simulate login by generating quantum-safe shared secret
+        # Generate the client's key pair
         kemalg = "ML-KEM-512"
         with oqs.KeyEncapsulation(kemalg) as client:
-            # Generate the client's key pair
             public_key_client = client.generate_keypair()
             private_key_client = client.export_secret_key()  # Export the private key
-
-        # Simulate the server encapsulating the shared secret
-        with oqs.KeyEncapsulation(kemalg) as server:
-            ciphertext, shared_secret_server = server.encap_secret(public_key_client)
-
-        # Use the shared secret as the session key
-        session_key = shared_secret_server[:32]
 
         # Fetch the newly created user from the database
         user = get_user_by_email(email)
         if not user:
             return jsonify({'error': 'Failed to retrieve user after registration'}), 500
 
-        # Encrypt session data
-        encrypted_session_data = encrypt_data(session_key, str(user['id']))
+        # Encrypt session data using the utility function
+        encrypted_session = encrypt_session(user['id'], public_key_client)
 
         # Store session data securely
-        session['encrypted_session_data'] = base64.b64encode(encrypted_session_data).decode('utf-8')
-        session['encapsulated_key'] = base64.b64encode(ciphertext).decode('utf-8')
+        session['encrypted_session_data'] = encrypted_session['encrypted_session_data']
+        session['encapsulated_key'] = encrypted_session['encapsulated_key']
         session['private_key'] = private_key_client
 
         # Return user details along with success message
@@ -58,6 +49,7 @@ def signup():
     else:
         return jsonify({'error': 'Username or email already exists'}), 409
 
+
 @auth_bp.route('/login', methods=['POST'])
 def login():
     data = request.json
@@ -69,26 +61,18 @@ def login():
 
     user = get_user_by_email(email)
     if user and check_password_hash(user['password_hash'], password):
-        # Initialize the KEM object for the client
+        # Generate the client's key pair
         kemalg = "ML-KEM-512"
         with oqs.KeyEncapsulation(kemalg) as client:
-            # Generate the client's key pair
             public_key_client = client.generate_keypair()
             private_key_client = client.export_secret_key()  # Export the private key
 
-        # Simulate the server encapsulating the shared secret
-        with oqs.KeyEncapsulation(kemalg) as server:
-            ciphertext, shared_secret_server = server.encap_secret(public_key_client)
-
-        # Use the shared secret as the session key
-        session_key = shared_secret_server[:32]
-
-        # Encrypt session data
-        encrypted_session_data = encrypt_data(session_key, str(user['id']))
+        # Encrypt session data using the utility function
+        encrypted_session = encrypt_session(user['id'], public_key_client)
 
         # Store session data securely
-        session['encrypted_session_data'] = base64.b64encode(encrypted_session_data).decode('utf-8')
-        session['encapsulated_key'] = base64.b64encode(ciphertext).decode('utf-8')
+        session['encrypted_session_data'] = encrypted_session['encrypted_session_data']
+        session['encapsulated_key'] = encrypted_session['encapsulated_key']
         session['private_key'] = private_key_client
 
         # Return user details along with success message

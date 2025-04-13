@@ -1,6 +1,6 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from utils.db import get_db_connection
-from utils.helpers import decrypt_data
+from utils.helpers import decrypt_session
 import base64
 import oqs
 
@@ -74,31 +74,9 @@ def check_auth_status(session):
     Returns:
         dict or None: User details if the session is valid, otherwise None.
     """
-    # Retrieve session data
-    encrypted_session_data = session.get('encrypted_session_data')
-    encapsulated_key = session.get('encapsulated_key')
-    private_key = session.get('private_key')
-
-    # Ensure all required session data is present
-    if not all([encrypted_session_data, encapsulated_key, private_key]):
-        return None  # Session data is missing or invalid
-
     try:
-        # Decode Base64-encoded session data back to binary
-        encrypted_session_data = base64.b64decode(encrypted_session_data)
-        encapsulated_key = base64.b64decode(encapsulated_key)
-
-        # Initialize the KEM object with the private key
-        kemalg = "ML-KEM-512"
-        with oqs.KeyEncapsulation(kemalg, private_key) as client:
-            # Decapsulate the shared secret using the private key
-            shared_secret = client.decap_secret(encapsulated_key)
-
-        # Use the first 32 bytes of the shared secret as the session key
-        session_key = shared_secret[:32]
-
-        # Decrypt the session data using the session key
-        user_id = decrypt_data(session_key, encrypted_session_data)
+        # Decrypt the session to retrieve the user_id using the decrypt_session function
+        user_id = decrypt_session(session)
 
         # Fetch user details from the database using the decrypted user_id
         user = get_user_by_id(user_id)
@@ -109,7 +87,7 @@ def check_auth_status(session):
                 'username': user['username'],
                 'email': user['email']
             }
-    except Exception as e:
+    except ValueError as e:
         print(f"Error validating session: {e}")
         return None  # Invalid session data or decryption failure
 
