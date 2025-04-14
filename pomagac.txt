@@ -41,3 +41,14 @@ curl -X POST http://localhost:5000/api/auth/login \
      -d '{"email": "test@example.com", "password": "password123"}'
 
 flask-unsign --decode --cookie '<session_cookie_value>' --secret '<your_app_secret_key>'
+
+-talk about the problem, advantages and disadvantages
+-what we implemented
+-what we did so far
+-key features
+-state of art post quantum encryption system
+-say who is in charge of what(photos)
+-diagram of the steps we have done
+-simplify the topic for audience
+-summary of the project
+-mention how you overcame the challenges
