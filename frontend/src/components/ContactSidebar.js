@@ -7,6 +7,7 @@ const ContactSidebar = ({ onAddContact }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [contacts, setContacts] = useState([]); // State to hold the list of contacts
+  const [contextMenu, setContextMenu] = useState(null); // State to manage the context menu
 
   // Fetch contacts when the component mounts
   useEffect(() => {
@@ -52,7 +53,6 @@ const ContactSidebar = ({ onAddContact }) => {
     }
 
     try {
-      // Simulate an API call to validate the email
       const response = await fetch('http://localhost:5000/api/contact/check-email', {
         method: 'POST',
         credentials: 'include',
@@ -63,7 +63,6 @@ const ContactSidebar = ({ onAddContact }) => {
       const data = await response.json();
 
       if (data.exists) {
-        // Add the contact if the email exists
         const updatedResponse = await fetch('http://localhost:5000/api/contact/get-contact-list', {
           method: 'GET',
           credentials: 'include',
@@ -76,7 +75,6 @@ const ContactSidebar = ({ onAddContact }) => {
 
         closeModal();
       } else {
-        // Show an error message if the email does not exist
         setErrorMessage('User with this email does not exist.');
       }
     } catch (error) {
@@ -84,6 +82,57 @@ const ContactSidebar = ({ onAddContact }) => {
       setErrorMessage('An error occurred while checking the email.');
     }
   };
+
+  // Function to handle right-click on a contact
+  const handleRightClick = (event, contact) => {
+    event.preventDefault(); // Prevent the default browser context menu
+    setContextMenu({
+      mouseX: event.clientX + 2,
+      mouseY: event.clientY - 6,
+      contactId: contact.id,
+      contactName: contact.username,
+    });
+  };
+
+  // Function to close the context menu
+  const handleCloseContextMenu = () => {
+    setContextMenu(null);
+  };
+
+  // Function to handle chat with a contact
+  const handleChat = (contactId, contactName) => {
+    console.log(`Chatting with contact: ${contactName} (ID: ${contactId})`);
+    handleCloseContextMenu();
+    // You can add logic here to navigate to a chat window or trigger a chat action
+  };
+
+// Function to handle deleting a contact
+const handleDelete = async (contactId, contactName) => {
+  if (window.confirm(`Are you sure you want to delete ${contactName}?`)) {
+    try {
+      const response = await fetch('http://localhost:5000/api/contact/delete-contact', {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contact_id: contactId }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Remove the deleted contact from the state
+        setContacts((prevContacts) => prevContacts.filter((c) => c.id !== contactId));
+        handleCloseContextMenu();
+      } else {
+        console.error('Error deleting contact:', data.error);
+        setErrorMessage(data.error || 'An error occurred while deleting the contact.');
+      }
+    } catch (error) {
+      console.error('Error deleting contact:', error);
+      setErrorMessage('An error occurred while deleting the contact.');
+    }
+  }
+};
 
   return (
     <div className="contact-sidebar">
@@ -96,7 +145,11 @@ const ContactSidebar = ({ onAddContact }) => {
       <div className="contact-list">
         {contacts.length > 0 ? (
           contacts.map((contact) => (
-            <div key={contact.id} className="contact-item">
+            <div
+              key={contact.id}
+              className="contact-item"
+              onContextMenu={(e) => handleRightClick(e, contact)} // Handle right-click
+            >
               <div className="contact-avatar">{contact.username[0]}</div>
               <div className="contact-info">
                 <div className="contact-name">{contact.username}</div>
@@ -132,6 +185,33 @@ const ContactSidebar = ({ onAddContact }) => {
           </div>
         </div>
       )}
+
+      {/* Context Menu */}
+      {contextMenu && (
+        <div
+          className="context-menu"
+          style={{
+            top: `${contextMenu.mouseY}px`,
+            left: `${contextMenu.mouseX}px`,
+          }}
+        >
+          <button
+            className="context-menu-option"
+            onClick={() => handleChat(contextMenu.contactId, contextMenu.contactName)}
+          >
+            Chat
+          </button>
+          <button
+            className="context-menu-option"
+            onClick={() => handleDelete(contextMenu.contactId, contextMenu.contactName)}
+          >
+            Delete
+          </button>
+        </div>
+      )}
+
+      {/* Close context menu when clicking outside */}
+      {contextMenu && <div className="context-menu-overlay" onClick={handleCloseContextMenu}></div>}
     </div>
   );
 };

@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, session
 from models.user_model import get_user_by_email
-from models.contact_model import add_contact_to_user, get_contacts_for_user
+from models.contact_model import add_contact_to_user, get_contacts_for_user, delete_contact
 from utils.helpers import decrypt_session
 
 # Create a Blueprint for contact-related routes
@@ -76,3 +76,33 @@ def get_contact_list():
     except Exception as e:
         print(f"Error fetching contact list: {e}")
         return jsonify({'error': 'An error occurred while fetching the contact list.'}), 500
+
+@contact_bp.route('/delete-contact', methods=['DELETE'])
+def delete_contact_route():
+    """
+    Delete a contact from the user's list of contacts.
+    """
+    try:
+        # Decrypt session data to get user_id
+        user_id = decrypt_session(session)
+
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 401
+
+    # Process the deletion logic
+    data = request.json
+    contact_id = data.get('contact_id')
+
+    if not contact_id:
+        return jsonify({'error': 'Contact ID is required'}), 400
+
+    # Call the delete_contact function
+    try:
+        success = delete_contact(user_id, contact_id)
+        if success:
+            return jsonify({'message': 'Contact deleted successfully.'}), 200
+        else:
+            return jsonify({'error': 'Failed to delete contact or contact not found.'}), 404
+    except Exception as e:
+        print(f"Error deleting contact: {e}")
+        return jsonify({'error': 'An error occurred while deleting the contact.'}), 500

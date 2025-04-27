@@ -27,7 +27,6 @@ def add_contact_to_user(user_id, contact_id):
         cursor.close()
         connection.close()
 
-
 def get_contacts_for_user(user_id):
     """
     Retrieve the list of contacts for the given user_id.
@@ -52,6 +51,39 @@ def get_contacts_for_user(user_id):
     except Exception as e:
         print(f"Error fetching contact list: {e}")
         return []
+
+    finally:
+        cursor.close()
+        connection.close()
+
+def delete_contact(user_id, contact_id):
+    """
+    Delete a contact from the user's list of contacts.
+    Returns True if successful, False otherwise.
+    """
+    connection = get_db_connection()
+    if not connection:
+        return False
+
+    try:
+        cursor = connection.cursor()
+        query = """
+        DELETE FROM user_contacts
+        WHERE user_id = %s AND contact_id = %s
+        """
+        cursor.execute(query, (user_id, contact_id))
+        connection.commit()
+
+        # Check if any rows were affected
+        if cursor.rowcount > 0:
+            return True
+        else:
+            return False
+
+    except Exception as e:
+        print(f"Error deleting contact: {e}")
+        connection.rollback()
+        return False
 
     finally:
         cursor.close()
