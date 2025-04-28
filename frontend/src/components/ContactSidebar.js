@@ -100,14 +100,38 @@ const ContactSidebar = ({ onAddContact, onStartChat }) => {
     setContextMenu(null);
   };
 
-  // Function to handle chat with a contact
-  const handleChat = (contactId, contactName) => {
+// Function to handle chat with a contact
+const handleChat = async (contactId, contactName) => {
+  try {
+    // Call the backend API to create a chat
+    const response = await fetch('http://localhost:5000/api/chats/create-chat', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contact_id: contactId }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to create chat.');
+    }
+
     const contact = contacts.find((c) => c.id === contactId);
     if (contact) {
-      onStartChat(contact); // Call the onStartChat function passed as a prop
+      // Add the chat ID returned by the backend to the contact object
+      contact.chatId = data.chatId;
+
+      // Call the onStartChat function passed as a prop
+      onStartChat(contact);
     }
+  } catch (error) {
+    console.error('Error creating chat:', error);
+    setErrorMessage('An error occurred while starting the chat.');
+  } finally {
     handleCloseContextMenu();
-  };
+  }
+};
 
   // Function to handle deleting a contact
   const handleDelete = async (contactId, contactName) => {

@@ -1,6 +1,6 @@
 // src/pages/Main.js
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; // Import useEffect for fetching data
 import { useUser } from '../services/UserContext';
 import { useNavigate } from 'react-router-dom';
 import ChatSidebar from '../components/ChatSidebar';
@@ -11,14 +11,10 @@ const Main = () => {
   const { user, logout } = useUser();
   const navigate = useNavigate();
 
-  // Mock data for chats
-  const [chats, setChats] = useState([
-    { id: 1, name: 'Alice', lastMessage: 'Hey there!', timestamp: '10:30 AM' },
-    { id: 2, name: 'Bob', lastMessage: 'Are we meeting today?', timestamp: '9:45 AM' },
-    { id: 3, name: 'Group Chat', lastMessage: 'John: See you at 5!', timestamp: 'Yesterday' },
-  ]);
+  // State for chats (initialize as an empty array)
+  const [chats, setChats] = useState([]);
 
-  // Mock data for contacts
+  // Mock data for contacts (can also be replaced with a database call later)
   const [contacts, setContacts] = useState([]);
 
   // State to track the currently selected chat
@@ -26,6 +22,30 @@ const Main = () => {
 
   // State to toggle between "Chats" and "Contacts"
   const [isChatSidebar, setIsChatSidebar] = useState(true);
+
+  // Function to fetch chats from the backend
+  const fetchChats = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/chats/get-chat-list', {
+        method: 'GET',
+        credentials: 'include', // Include cookies/sessions for authentication
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch chats');
+      }
+
+      const data = await response.json();
+      setChats(data.chats || []); // Update the chats state with the fetched data
+    } catch (error) {
+      console.error('Error fetching chats:', error);
+    }
+  };
+
+  // Fetch chats when the component mounts
+  useEffect(() => {
+    fetchChats();
+  }, []);
 
   // Function to handle adding a new contact
   const handleAddContact = (email) => {
