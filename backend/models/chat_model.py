@@ -4,6 +4,7 @@ def get_chats_for_user(user_id):
     """
     Retrieve the list of chats for the given user_id.
     Returns a list of chat details (id, name, last_message, timestamp).
+    The chat name is dynamically generated based on the other participant's name.
     """
     connection = get_db_connection()
     if not connection:
@@ -12,22 +13,27 @@ def get_chats_for_user(user_id):
     try:
         cursor = connection.cursor(dictionary=True)  # Use dictionary=True for easier JSON serialization
 
+        # Query to fetch chats with dynamically generated names
         query = """
         SELECT 
             c.id AS id,
-            c.name AS name,
+            u.username AS name, -- Get the name of the other participant
             m.content AS last_message,
             m.created_at AS timestamp
         FROM 
-            chat_participants cp
+            chat_participants cp1
         JOIN 
-            chats c ON cp.chat_id = c.id
+            chat_participants cp2 ON cp1.chat_id = cp2.chat_id AND cp1.user_id != cp2.user_id
+        JOIN 
+            chats c ON cp1.chat_id = c.id
+        JOIN 
+            users u ON cp2.user_id = u.id
         LEFT JOIN 
             messages m ON c.id = m.chat_id
         WHERE 
-            cp.user_id = %s
+            cp1.user_id = %s
         GROUP BY 
-            c.id, c.name, m.content, m.created_at
+            c.id, u.username, m.content, m.created_at
         ORDER BY 
             MAX(m.created_at) DESC;
         """
