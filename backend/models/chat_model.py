@@ -94,29 +94,32 @@ def create_chat(user_id, contact_id):
             connection.commit()
             return True
 
-        # Fetch the name of the contact using the contact_id
+        # Fetch the usernames of both participants
         cursor.execute(
             """
             SELECT username
             FROM users
-            WHERE id = %s
+            WHERE id = %s OR id = %s
+            ORDER BY username ASC
             """,
-            (contact_id,)
+            (user_id, contact_id)
         )
-        contact_name_result = cursor.fetchone()
+        usernames = cursor.fetchall()
 
-        if not contact_name_result:
-            # If the contact_id does not exist in the users table, rollback and exit
+        if len(usernames) != 2:
+            # If we don't have exactly two usernames, rollback and exit
             connection.rollback()
-            print(f"Error: Contact ID {contact_id} not found.")
+            print(f"Error: Unable to fetch usernames for user IDs {user_id} and {contact_id}.")
             return False
 
-        contact_name = contact_name_result[0]
+        # Extract the usernames and create the chat name
+        username1, username2 = usernames[0][0], usernames[1][0]
+        chat_name = f"{username1}_{username2}"
 
-        # Create a new chat with the custom name 
+        # Create a new chat with the custom name
         cursor.execute(
             "INSERT INTO chats (name) VALUES (%s)",
-            [contact_name]
+            [chat_name]
         )
         chat_id = cursor.lastrowid
 
