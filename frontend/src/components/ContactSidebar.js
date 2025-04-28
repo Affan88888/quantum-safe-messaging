@@ -1,8 +1,9 @@
-// src/components/ContactSidebar.js
+// src/component/ContactSidebar.js
+
 import React, { useState, useEffect } from 'react';
 import './ContactSidebar.css';
 
-const ContactSidebar = ({ onAddContact }) => {
+const ContactSidebar = ({ onAddContact, onStartChat }) => {
   const [newContactEmail, setNewContactEmail] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -101,38 +102,40 @@ const ContactSidebar = ({ onAddContact }) => {
 
   // Function to handle chat with a contact
   const handleChat = (contactId, contactName) => {
-    console.log(`Chatting with contact: ${contactName} (ID: ${contactId})`);
+    const contact = contacts.find((c) => c.id === contactId);
+    if (contact) {
+      onStartChat(contact); // Call the onStartChat function passed as a prop
+    }
     handleCloseContextMenu();
-    // You can add logic here to navigate to a chat window or trigger a chat action
   };
 
-// Function to handle deleting a contact
-const handleDelete = async (contactId, contactName) => {
-  if (window.confirm(`Are you sure you want to delete ${contactName}?`)) {
-    try {
-      const response = await fetch('http://localhost:5000/api/contact/delete-contact', {
-        method: 'DELETE',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contact_id: contactId }),
-      });
+  // Function to handle deleting a contact
+  const handleDelete = async (contactId, contactName) => {
+    if (window.confirm(`Are you sure you want to delete ${contactName}?`)) {
+      try {
+        const response = await fetch('http://localhost:5000/api/contact/delete-contact', {
+          method: 'DELETE',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ contact_id: contactId }),
+        });
 
-      const data = await response.json();
+        const data = await response.json();
 
-      if (response.ok) {
-        // Remove the deleted contact from the state
-        setContacts((prevContacts) => prevContacts.filter((c) => c.id !== contactId));
-        handleCloseContextMenu();
-      } else {
-        console.error('Error deleting contact:', data.error);
-        setErrorMessage(data.error || 'An error occurred while deleting the contact.');
+        if (response.ok) {
+          // Remove the deleted contact from the state
+          setContacts((prevContacts) => prevContacts.filter((c) => c.id !== contactId));
+          handleCloseContextMenu();
+        } else {
+          console.error('Error deleting contact:', data.error);
+          setErrorMessage(data.error || 'An error occurred while deleting the contact.');
+        }
+      } catch (error) {
+        console.error('Error deleting contact:', error);
+        setErrorMessage('An error occurred while deleting the contact.');
       }
-    } catch (error) {
-      console.error('Error deleting contact:', error);
-      setErrorMessage('An error occurred while deleting the contact.');
     }
-  }
-};
+  };
 
   return (
     <div className="contact-sidebar">

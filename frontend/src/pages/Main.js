@@ -1,4 +1,5 @@
 // src/pages/Main.js
+
 import React, { useState } from 'react';
 import { useUser } from '../services/UserContext';
 import { useNavigate } from 'react-router-dom';
@@ -30,6 +31,25 @@ const Main = () => {
   const handleAddContact = (email) => {
     const newContact = { id: contacts.length + 1, username: email.split('@')[0], email };
     setContacts([...contacts, newContact]);
+  };
+
+  // Function to start a chat with a contact
+  const handleStartChat = (contact) => {
+    // Check if a chat with the contact already exists
+    const existingChat = chats.find((chat) => chat.name === contact.username);
+    if (existingChat) {
+      setSelectedChat(existingChat); // Select the existing chat
+    } else {
+      // Create a new chat for the contact
+      const newChat = {
+        id: chats.length + 1,
+        name: contact.username,
+        lastMessage: '',
+        timestamp: 'Now',
+      };
+      setChats([...chats, newChat]); // Add the new chat to the list
+      setSelectedChat(newChat); // Set the new chat as the selected chat
+    }
   };
 
   // Function to handle logout
@@ -78,7 +98,11 @@ const Main = () => {
         {isChatSidebar ? (
           <ChatSidebar chats={chats} selectedChat={selectedChat} setSelectedChat={setSelectedChat} />
         ) : (
-          <ContactSidebar contacts={contacts} onAddContact={handleAddContact} />
+          <ContactSidebar
+            contacts={contacts}
+            onAddContact={handleAddContact}
+            onStartChat={handleStartChat} // Pass the function to start a chat
+          />
         )}
       </div>
 
