@@ -88,10 +88,29 @@ def create_chat(user_id, contact_id):
             connection.commit()
             return True
 
-        # Create a new chat
+        # Fetch the name of the contact using the contact_id
+        cursor.execute(
+            """
+            SELECT username
+            FROM users
+            WHERE id = %s
+            """,
+            (contact_id,)
+        )
+        contact_name_result = cursor.fetchone()
+
+        if not contact_name_result:
+            # If the contact_id does not exist in the users table, rollback and exit
+            connection.rollback()
+            print(f"Error: Contact ID {contact_id} not found.")
+            return False
+
+        contact_name = contact_name_result[0]
+
+        # Create a new chat with the custom name 
         cursor.execute(
             "INSERT INTO chats (name) VALUES (%s)",
-            [f"Chat with {contact_id}"]  # Customize the chat name here
+            [contact_name]
         )
         chat_id = cursor.lastrowid
 
