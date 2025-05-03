@@ -30,8 +30,6 @@ bcdedit /set hypervisorlaunchtype auto
 
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 
--For your quantum-safe messaging project, WebSockets would be a better choice because they enable instant delivery of messages between users, providing a smoother and more responsive user experience. However, implementing WebSockets requires additional setup, such as using libraries like Socket.IO (for Node.js) or integrating WebSocket support into your Flask backend.
-
 curl -X POST http://localhost:5000/api/auth/signup \
      -H "Content-Type: application/json" \
      -d '{"username": "testuser", "email": "test@example.com", "password": "password123"}'
@@ -52,3 +50,38 @@ flask-unsign --decode --cookie '<session_cookie_value>' --secret '<your_app_secr
 -simplify the topic for audience
 -summary of the project
 -mention how you overcame the challenges
+
+CREATE TABLE IF NOT EXISTS users (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                username VARCHAR(255) NOT NULL UNIQUE,
+                email VARCHAR(255) NOT NULL UNIQUE,
+                password_hash VARCHAR(255) NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            ); CREATE TABLE IF NOT EXISTS chats (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(255), -- Optional: For naming group chats
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            ); CREATE TABLE IF NOT EXISTS chat_participants (
+                chat_id INT NOT NULL,
+                user_id INT NOT NULL,
+                joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (chat_id, user_id),
+                FOREIGN KEY (chat_id) REFERENCES chats(id) ON DELETE CASCADE,
+                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+            ); CREATE TABLE IF NOT EXISTS messages (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                chat_id INT NOT NULL,
+                sender_id INT NOT NULL,
+                content TEXT NOT NULL, -- The text content of the message
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (chat_id) REFERENCES chats(id) ON DELETE CASCADE,
+                FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE
+            ); CREATE TABLE IF NOT EXISTS user_contacts (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                user_id INT NOT NULL,
+                contact_id INT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+                FOREIGN KEY (contact_id) REFERENCES users(id) ON DELETE CASCADE,
+                UNIQUE (user_id, contact_id) -- Ensures no duplicate contacts for the same user
+            );
