@@ -1,2 +1,56 @@
+from datetime import datetime
 from utils.db import get_db_connection
 
+def save_message_to_db(chat_id, sender_id, content):
+    """
+    Save a message to the database.
+    Returns True if successful, False otherwise.
+    """
+    connection = get_db_connection()
+    if not connection:
+        return False
+
+    try:
+        cursor = connection.cursor()
+        query = """
+        INSERT INTO messages (chat_id, sender_id, content, created_at)
+        VALUES (%s, %s, %s, %s)
+        """
+        cursor.execute(query, (chat_id, sender_id, content, datetime.now()))
+        connection.commit()
+        return True
+    except Exception as e:
+        print(f"Error saving message to DB: {e}")
+        connection.rollback()
+        return False
+    finally:
+        cursor.close()
+        connection.close()
+
+def get_chat_history_from_db(user_id, chat_id):
+    """
+    Retrieve chat history for a specific chat.
+    Returns a list of messages.
+    """
+    connection = get_db_connection()
+    if not connection:
+        return []
+
+    try:
+        cursor = connection.cursor(dictionary=True)
+        query = """
+        SELECT m.id, m.sender_id, u.username AS sender_username, m.content, m.created_at
+        FROM messages m
+        JOIN users u ON m.sender_id = u.id
+        WHERE m.chat_id = %s
+        ORDER BY m.created_at ASC
+        """
+        cursor.execute(query, (chat_id,))
+        messages = cursor.fetchall()
+        return messages
+    except Exception as e:
+        print(f"Error fetching chat history: {e}")
+        return []
+    finally:
+        cursor.close()
+        connection.close()
