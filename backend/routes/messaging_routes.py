@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, session
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit, join_room
 from models.messaging_model import save_message_to_db, get_chat_history_from_db
+from models.chat_model import get_chats_for_user
 from utils.helpers import decrypt_session
 from datetime import datetime
 
@@ -14,8 +15,19 @@ socketio = SocketIO()
 def handle_connect():
     """Handle WebSocket connection."""
     try:
+        # Decrypt the session to get the user ID
         user_id = decrypt_session(session)
         print(f"User {user_id} connected via WebSocket.")
+        
+        # Fetch the list of chats for the user
+        user_chats = get_chats_for_user(user_id)  # Fetch chats from the database
+        
+        # Join the user to each chat room
+        for chat in user_chats:
+            chat_id = str(chat['id'])  # Convert chat_id to string to ensure consistency
+            join_room(chat_id)
+            print(f"User {user_id} joined room: {chat_id}")
+
     except ValueError as e:
         print(f"WebSocket connection failed: {e}")
         return False  # Reject connection if session decryption fails
@@ -51,16 +63,7 @@ def handle_send_message(data):
             'sender_id': sender_id,
             'content': content,
             'timestamp': datetime.now().strftime('%I:%M %p')
-        }, room=chat_id)  # Use chat_id as the room for broadcasting
-
-        # Emit the message back to the sender for UI updates
-        emit('receive_message', {
-            'id': message_id,  # Include the database-generated ID
-            'chat_id': chat_id,
-            'sender_id': sender_id,
-            'content': content,
-            'timestamp': datetime.now().strftime('%I:%M %p')
-        })
+        }, room=str(chat_id))  # Use chat_id as the room for broadcasting
 
     except Exception as e:
         print(f"Error handling send_message event: {e}")
