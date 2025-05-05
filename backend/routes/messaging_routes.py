@@ -38,14 +38,15 @@ def handle_send_message(data):
             emit('error', {'message': 'Chat ID and content are required.'})
             return
 
-        # Save the message to the database
-        success = save_message_to_db(chat_id, sender_id, content)
-        if not success:
+        # Save the message to the database and retrieve the auto-generated ID
+        message_id = save_message_to_db(chat_id, sender_id, content)
+        if not message_id:
             emit('error', {'message': 'Failed to save message to the database.'})
             return
 
         # Broadcast the message to all participants in the chat
         emit('receive_message', {
+            'id': message_id,  # Include the database-generated ID
             'chat_id': chat_id,
             'sender_id': sender_id,
             'content': content,
@@ -54,6 +55,7 @@ def handle_send_message(data):
 
         # Emit the message back to the sender for UI updates
         emit('receive_message', {
+            'id': message_id,  # Include the database-generated ID
             'chat_id': chat_id,
             'sender_id': sender_id,
             'content': content,

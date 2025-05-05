@@ -1,4 +1,5 @@
 // src/components/Chat.js
+
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 
@@ -47,40 +48,74 @@ const Chat = ({ selectedChat, user }) => {
     if (!selectedChat) return;
 
     socket.on('receive_message', (message) => {
+
+      // Ensure the message belongs to the currently selected chat
       if (message.chat_id === selectedChat.id) {
-        setMessages((prevMessages) => [...prevMessages, message]);
+        setMessages((prevMessages) => {
+          // Ensure the `id` is a string
+          const receivedMessage = { ...message, id: String(message.id) };
+
+          // Check if the message is an optimistic update (temporary ID)
+          const isOptimistic = prevMessages.some(
+            (msg) => typeof msg.id === 'string' && msg.id.startsWith('temp-') && msg.content === receivedMessage.content
+          );
+
+          if (isOptimistic) {
+            // Replace the optimistic message with the final message
+            return prevMessages.map((msg) =>
+              typeof msg.id === 'string' && msg.id.startsWith('temp-') && msg.content === receivedMessage.content
+                ? { ...receivedMessage, sender_id: user.id } // Ensure sender_id matches user.id
+                : msg
+            );
+          }
+
+          // Add the message only if it's from the recipient (not the current user)
+          if (message.sender_id !== user.id) {
+            // Add the new message if it's not a duplicate
+            const isDuplicate = prevMessages.some((msg) => msg.id === receivedMessage.id);
+            if (!isDuplicate) {
+              return [...prevMessages, receivedMessage];
+            }
+          }
+
+          // Return the unchanged state if the message is a duplicate or from the current user
+          return prevMessages;
+        });
       }
     });
 
+    // Cleanup WebSocket listeners on unmount
     return () => {
       socket.off('receive_message');
     };
-  }, [selectedChat]);
+  }, [selectedChat, user]);
 
   // Function to handle sending a message
   const handleSendMessage = async () => {
     if (!newMessage.trim() || !selectedChat) return;
 
     try {
+      const tempMessageId = `temp-${Date.now()}`; // Temporary unique ID for optimistic update
+
       const messageData = {
         chat_id: selectedChat.id,
         sender_id: user.id,
         content: newMessage,
       };
 
+      // Optimistically update the UI with a temporary message
+      const optimisticMessage = {
+        id: tempMessageId, // Temporary ID for optimistic update
+        sender_id: user.id,
+        sender_username: user.username,
+        content: newMessage,
+        timestamp: new Date().toLocaleTimeString(),
+      };
+
+      setMessages((prevMessages) => [...prevMessages, optimisticMessage]);
+
       // Send the message via WebSocket
       socket.emit('send_message', messageData);
-
-      // Optimistically update the UI
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          sender_id: user.id,
-          sender_username: user.username,
-          content: newMessage,
-          timestamp: new Date().toLocaleTimeString(),
-        },
-      ]);
 
       // Clear the input field
       setNewMessage('');
@@ -99,8 +134,8 @@ const Chat = ({ selectedChat, user }) => {
 
       {/* Message List */}
       <div className="message-list">
-        {messages.map((msg, index) => (
-          <div key={index} className={`message ${msg.sender_id === user.id ? 'sent' : 'received'}`}>
+        {messages.map((msg) => (
+          <div key={msg.id} className={`message ${msg.sender_id === user.id ? 'sent' : 'received'}`}>
             <div className="message-content">{msg.content}</div>
             <div className="timestamp">{msg.timestamp}</div>
           </div>

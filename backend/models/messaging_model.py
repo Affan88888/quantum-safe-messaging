@@ -4,11 +4,11 @@ from utils.db import get_db_connection
 def save_message_to_db(chat_id, sender_id, content):
     """
     Save a message to the database.
-    Returns True if successful, False otherwise.
+    Returns the ID of the newly inserted message if successful, None otherwise.
     """
     connection = get_db_connection()
     if not connection:
-        return False
+        return None
 
     try:
         cursor = connection.cursor()
@@ -18,11 +18,15 @@ def save_message_to_db(chat_id, sender_id, content):
         """
         cursor.execute(query, (chat_id, sender_id, content, datetime.now()))
         connection.commit()
-        return True
+
+        # Retrieve the auto-generated ID of the inserted message
+        message_id = cursor.lastrowid
+        return message_id
+    
     except Exception as e:
         print(f"Error saving message to DB: {e}")
         connection.rollback()
-        return False
+        return None
     finally:
         cursor.close()
         connection.close()
