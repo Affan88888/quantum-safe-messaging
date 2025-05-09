@@ -3,9 +3,9 @@
 import React from 'react';
 import './ChatSidebar.css';
 
-const ChatSidebar = ({ chats, selectedChat, setSelectedChat }) => {
+const ChatSidebar = ({ chats, selectedChat, setSelectedChat, isDarkMode }) => {
   return (
-    <div className="chat-sidebar">
+    <div className={`chat-sidebar ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
       <div className="sidebar-header">
         <h2>Chats</h2>
         <button className="new-chat-button">New Chat</button>

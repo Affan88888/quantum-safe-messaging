@@ -23,6 +23,14 @@ const Main = () => {
   // State to toggle between "Chats" and "Contacts"
   const [isChatSidebar, setIsChatSidebar] = useState(true);
 
+  // State for dark mode
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // Function to toggle dark mode
+  const toggleDarkMode = () => {
+    setIsDarkMode((prevMode) => !prevMode);
+  };
+
   // Function to fetch chats from the backend
   const fetchChats = async () => {
     try {
@@ -90,7 +98,7 @@ const Main = () => {
   };
 
   return (
-    <div className="main-container">
+    <div className={`main-container ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
       {/* Sidebar */}
       <div className="sidebar">
         <h1>{user ? `Welcome ${user.username}!` : 'Loading...'}</h1>
@@ -113,7 +121,7 @@ const Main = () => {
 
         {/* Conditional Rendering of Sidebars */}
         {isChatSidebar ? (
-          <ChatSidebar chats={chats} selectedChat={selectedChat} setSelectedChat={setSelectedChat} />
+          <ChatSidebar chats={chats} selectedChat={selectedChat} setSelectedChat={setSelectedChat} isDarkMode={isDarkMode}/>
         ) : (
           <ContactSidebar
             contacts={contacts}
@@ -133,6 +141,11 @@ const Main = () => {
           </div>
         )}
       </div>
+
+      {/* Dark Mode Toggle Button */}
+      <button className="dark-mode-toggle" onClick={toggleDarkMode}>
+        {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+      </button>
 
       {/* Logout Button */}
       <button className="logout-button" onClick={handleLogout}>

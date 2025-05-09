@@ -2,99 +2,90 @@
 .main-container {
   display: flex;
   height: 100vh;
-  background-color: #f0f2f5;
   font-family: Arial, sans-serif;
 }
 
-/* Sidebar */
+/* Light Mode */
+.light-mode {
+  background-color: #f0f2f5;
+  color: #000000;
+}
+
+.light-mode .sidebar h1 {
+  background-color: #f0f2f5;
+  color: #000000;
+}
+
+.light-mode .main-content {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.light-mode .timestamp {
+  color: #999;
+}
+
+.light-mode .logout-button {
+  background-color: #ff4d4d;
+  color: white;
+}
+
+.light-mode .toggle-button.active {
+  background-color: #0084ff;
+  color: white;
+}
+
+.light-mode .toggle-button {
+  color: #666;
+}
+
+/* Dark Mode */
+.dark-mode {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+.dark-mode .sidebar h1 {
+  background-color: #1e1e1e;
+  color: #ffffff;
+}
+
+.dark-mode .main-content {
+  background-color: #1e1e1e;
+  color: #ffffff;
+}
+
+.dark-mode .timestamp {
+  color: #aaaaaa;
+}
+
+.dark-mode .logout-button {
+  background-color: #cf6679;
+  color: white;
+}
+
+.dark-mode .toggle-button.active {
+  background-color: #bb86fc;
+  color: white;
+}
+
+.dark-mode .toggle-button {
+  color: #cccccc;
+}
+
+/* Common Styles */
 .sidebar h1 {
   margin: 0;
   padding: 15px;
   font-size: 1.5rem;
   text-align: center;
-  background-color: #f0f2f5;
-  color: #000000;
   border-bottom: 1px solid #ddd;
 }
 
-/* Main content */
 .main-content {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: #ffffff;
-}
-
-.chat-header {
-  display: flex;
-  align-items: center;
-  padding: 15px;
-  border-bottom: 1px solid #ddd;
-  color: #000000;
-}
-
-.message-list {
-  flex: 1;
-  padding: 15px;
-  overflow-y: auto;
-}
-
-.message {
-  display: flex;
-  margin-bottom: 10px;
-  color: #000000;
-}
-
-.message.received {
-  justify-content: flex-start;
-}
-
-.message.sent {
-  justify-content: flex-end;
-}
-
-.message-content {
-  max-width: 70%;
-  padding: 10px;
-  border-radius: 10px;
-  font-size: 14px;
-}
-
-.message.received .message-content {
-  background-color: #ebebeb;
-}
-
-.message.sent .message-content {
-  background-color: #dcf8c6;
-}
-
-.timestamp {
-  font-size: 10px;
-  color: #999;
-  margin-top: 2px;
-}
-
-.message-input {
-  display: flex;
-  padding: 10px;
-  border-top: 1px solid #ddd;
-}
-
-.message-input input {
-  flex: 1;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 20px;
-  margin-right: 10px;
-}
-
-.send-button {
-  background-color: #0084ff;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 20px;
-  cursor: pointer;
 }
 
 .no-chat-selected {
@@ -103,23 +94,18 @@
   align-items: center;
   height: 100%;
   font-size: 16px;
-  color: #666;
 }
 
-/* Logout button */
 .logout-button {
   position: absolute;
   bottom: 20px;
   right: 20px;
-  background-color: #ff4d4d;
-  color: white;
   border: none;
   padding: 10px 15px;
   border-radius: 5px;
   cursor: pointer;
 }
 
-/* Toggle Buttons */
 .toggle-buttons {
   display: flex;
   justify-content: space-around;
@@ -129,7 +115,6 @@
 
 .toggle-button {
   background-color: transparent;
-  color: #666;
   border: none;
   padding: 8px 12px;
   cursor: pointer;
@@ -137,7 +122,15 @@
   border-radius: 5px;
 }
 
-.toggle-button.active {
+/* Dark Mode Toggle Button */
+.dark-mode-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
   background-color: #0084ff;
   color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
 }
