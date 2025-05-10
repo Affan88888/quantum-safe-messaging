@@ -136,16 +136,19 @@ const Main = () => {
 
         {/* Settings Button */}
       <div className="settings-button-container">
-        {/* Settings Button */}
-        <button className="settings-button">
-          {/* Icon with onClick handler */}
-          <span
-            className="icon"
-            onClick={() => setIsSettingsMenuOpen((prev) => !prev)}
-          >
-            ⚙️
-          </span>
-        </button>
+          {/* Settings Button */}
+          <button className="settings-button">
+            {/* Icon with onClick handler */}
+            <span
+              className="icon"
+              onClick={() => setIsSettingsMenuOpen((prev) => !prev)}
+            >
+              ⚙️
+            </span>
+            {/* Text shown on hover */}
+            <span className="settings-text">Settings</span>
+          </button>
+          
           {/* Settings Menu */}
           {isSettingsMenuOpen && (
             <div className="settings-menu">
