@@ -12,6 +12,7 @@
   width: 300px; /* Fixed width for the sidebar */
   height: 100%; /* Full height of the main container */
   border-right: 1px solid #ddd;
+  overflow-y: auto;
 }
 
 /* Light Mode */
@@ -32,11 +33,6 @@
 
 .light-mode .timestamp {
   color: #999;
-}
-
-.light-mode .logout-button {
-  background-color: #ff4d4d;
-  color: white;
 }
 
 .light-mode .toggle-button.active {
@@ -66,11 +62,6 @@
 
 .dark-mode .timestamp {
   color: #aaaaaa;
-}
-
-.dark-mode .logout-button {
-  background-color: #cf6679;
-  color: white;
 }
 
 .dark-mode .toggle-button.active {
@@ -117,16 +108,6 @@
   font-size: 16px;
 }
 
-.logout-button {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
 .toggle-buttons {
   display: flex;
   justify-content: space-around;
@@ -143,15 +124,92 @@
   border-radius: 5px;
 }
 
-/* Dark Mode Toggle Button */
-.dark-mode-toggle {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background-color: #0084ff;
-  color: white;
+/* Settings Button Container */
+.settings-button-container {
+  margin-top: auto; /* Pushes the button to the bottom of the sidebar */
+  position: relative; /* Allows positioning of the popup menu */
+}
+
+/* Settings Button */
+.settings-button {
+  width: auto; /* Adjust width to fit content */
+  padding: 10px; /* Remove padding from the button */
   border: none;
-  padding: 10px 15px;
+  background-color: transparent; /* No background color */
+  cursor: default; /* Default cursor for the button */
+}
+
+/* Icon Styling */
+.settings-button .icon {
+  font-size: 34px; /* Adjust the size of the icon */
+  cursor: pointer; /* Change cursor to pointer for clickable icon */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Settings Menu */
+.settings-menu {
+  position: absolute;
+  bottom: 50px; /* Position above the settings button */
+  left: 50px;
+  border: 1px solid #ddd;
   border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 150px;
+  z-index: 10;
+}
+
+/* Settings Menu in Dark Mode */
+.dark-mode .settings-menu {
+  background-color: #1e1e1e; /* Dark background in dark mode */
+  border: 1px solid #444; /* Darker border in dark mode */
+  color: #ffffff; /* White text in dark mode */
+}
+
+/* Buttons Inside Settings Menu */
+.settings-menu button {
+  width: 100%;
+  padding: 10px 15px;
+  text-align: left;
+  border: none;
+  background-color: transparent;
   cursor: pointer;
+  font-size: 14px;
+}
+
+/* Buttons Inside Settings Menu in Light Mode */
+.light-mode .settings-menu button {
+  color: #000000;
+  background-color:white; /* Black text in light mode */
+}
+
+/* Buttons Inside Settings Menu in Dark Mode */
+.dark-mode .settings-menu button {
+  color: #ffffff;
+  background-color:black; /* White text in dark mode */
+}
+
+.light-mode .settings-menu button:hover {
+  background-color: rgb(230, 230, 230); /* Hover effect in light mode */
+}
+
+.dark-mode .settings-menu button:hover {
+  background-color: #333333; /* Hover effect in dark mode */
+}
+
+/* Close Button */
+.settings-menu .close-button {
+  position: absolute;
+  top: 0px; /* Slightly offset from the top */
+  right: 0px; /* Slightly offset from the right */
+  background-color: transparent; /* No background color */
+  border: none; /* No border */
+  font-size: 20px; /* Size of the "X" */
+  cursor: pointer; /* Pointer cursor for clickable icon */
+  color: #666; /* Gray color for light mode */
+  padding: 0; /* Remove padding to limit clickable area */
+  width: auto; /* Allow width to adjust based on content */
+  height: auto; /* Allow height to adjust based on content */
+  line-height: 1; /* Ensure proper vertical alignment */
 }

@@ -13,18 +13,16 @@ const Main = () => {
 
   // State for chats
   const [chats, setChats] = useState([]);
-
   // State for contacts
   const [contacts, setContacts] = useState([]);
-
   // State to track the currently selected chat
   const [selectedChat, setSelectedChat] = useState(null);
-
   // State to toggle between "Chats" and "Contacts"
   const [isChatSidebar, setIsChatSidebar] = useState(true);
-
   // State for dark mode
   const [isDarkMode, setIsDarkMode] = useState(false);
+  // State to control the visibility of the settings menu
+  const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
 
   // Function to toggle dark mode
   const toggleDarkMode = () => {
@@ -121,10 +119,12 @@ const Main = () => {
 
         {/* Conditional Rendering of Sidebars */}
         {isChatSidebar ? (
-          <ChatSidebar chats={chats} 
-            selectedChat={selectedChat} 
-            setSelectedChat={setSelectedChat} 
-            isDarkMode={isDarkMode}/>
+          <ChatSidebar
+            chats={chats}
+            selectedChat={selectedChat}
+            setSelectedChat={setSelectedChat}
+            isDarkMode={isDarkMode}
+          />
         ) : (
           <ContactSidebar
             contacts={contacts}
@@ -133,6 +133,50 @@ const Main = () => {
             isDarkMode={isDarkMode}
           />
         )}
+
+        {/* Settings Button */}
+      <div className="settings-button-container">
+        {/* Settings Button */}
+        <button className="settings-button">
+          {/* Icon with onClick handler */}
+          <span
+            className="icon"
+            onClick={() => setIsSettingsMenuOpen((prev) => !prev)}
+          >
+            ⚙️
+          </span>
+        </button>
+          {/* Settings Menu */}
+          {isSettingsMenuOpen && (
+            <div className="settings-menu">
+              {/* Close Button */}
+              <button
+                className="close-button"
+                onClick={() => setIsSettingsMenuOpen(false)}
+              >
+                &times; {/* Unicode for "X" symbol */}
+              </button>
+
+              {/* Dark Mode Toggle Button */}
+              <button className="dark-mode-toggle" onClick={toggleDarkMode}>
+                {isDarkMode ? (
+                  <>
+                    <span className="icon">🌙</span> Light Mode
+                  </>
+                ) : (
+                  <>
+                    <span className="icon">☀️</span> Dark Mode
+                  </>
+                )}
+              </button>
+
+              {/* Logout Button */}
+              <button className="logout-button" onClick={handleLogout}>
+                <i className="fas fa-right-from-bracket icon"></i> Logout
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Main Content */}
@@ -145,16 +189,6 @@ const Main = () => {
           </div>
         )}
       </div>
-
-      {/* Dark Mode Toggle Button */}
-      <button className="dark-mode-toggle" onClick={toggleDarkMode}>
-        {isDarkMode ? 'Light Mode' : 'Dark Mode'}
-      </button>
-
-      {/* Logout Button */}
-      <button className="logout-button" onClick={handleLogout}>
-        Logout
-      </button>
     </div>
   );
 };

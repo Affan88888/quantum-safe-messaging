@@ -1,23 +1,10 @@
-/* Contact Sidebar Container */
-.contact-sidebar {
-    width: 300px;
-    display: flex;
-    flex-direction: column;
-    border-right: 1px solid #ddd;
-  }
-
   .add-contact-button {
-    background-color: #0084ff;
     color: white;
     border: none;
     padding: 8px 12px;
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
-  }
-  
-  .add-contact-button:hover {
-    background-color: #0066cc;
   }
   
   .contact-list {
@@ -33,10 +20,6 @@
     cursor: pointer;
     transition: background-color 0.2s;
     border-radius: 5px;
-  }
-  
-  .contact-item:hover {
-    background-color: #f0f2f5;
   }
   
   .contact-avatar {
@@ -185,7 +168,7 @@
 }
 
 .light-mode .contact-item:hover {
-  background-color: #f0f2f5;
+  background-color: rgb(230, 230, 230);
 }
 
 .light-mode .contact-name {
