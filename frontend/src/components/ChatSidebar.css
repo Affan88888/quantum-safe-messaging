@@ -6,6 +6,10 @@
   border-right: 1px solid #ddd;
 }
 
+.title {
+  font-size: 1.2rem; 
+}
+
 .new-chat-button {
   background-color: #0084ff;
   color: white;
@@ -102,7 +106,7 @@
 }
 
 .chat-sidebar.dark-mode .new-chat-button {
-  background-color: #bb86fc;
+  background-color: #0084ff;
   color: white;
 }
 
