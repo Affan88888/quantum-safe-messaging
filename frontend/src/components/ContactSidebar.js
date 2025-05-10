@@ -167,7 +167,7 @@ const handleChat = async (contactId, contactName) => {
       <div className="sidebar-header">
         <div className="title"><h3>Contacts</h3></div>
         <button className="add-contact-button" onClick={openModal}>
-          Add Contact
+          <h5>Add Contact</h5>
         </button>
       </div>
 
@@ -188,7 +188,7 @@ const handleChat = async (contactId, contactName) => {
             </div>
           ))
         ) : (
-          <div className="no-contacts">No contacts added yet.</div>
+          <div className="no-contacts"><h5>No contacts added yet.</h5></div>
         )}
       </div>
 
@@ -203,13 +203,13 @@ const handleChat = async (contactId, contactName) => {
               onChange={(e) => setNewContactEmail(e.target.value)}
               placeholder="Enter contact email"
             />
-            {errorMessage && <p className="error-message">{errorMessage}</p>}
+            {errorMessage && <h5 className="error-message">{errorMessage}</h5>}
             <div className="modal-buttons">
               <button className="cancel-button" onClick={closeModal}>
-                Cancel
+                <h5>Cancel</h5>
               </button>
               <button className="add-button" onClick={handleAddContact}>
-                Add
+                <h5>Add</h5>
               </button>
             </div>
           </div>
@@ -231,7 +231,7 @@ const handleChat = async (contactId, contactName) => {
               handleChat(contextMenu.contactId, contextMenu.contactName)
             }
           >
-            Chat
+            <h5>Chat</h5>
           </button>
           <button
             className="context-menu-option"
@@ -239,7 +239,7 @@ const handleChat = async (contactId, contactName) => {
               handleDelete(contextMenu.contactId, contextMenu.contactName)
             }
           >
-            Delete
+            <h5>Delete</h5>
           </button>
         </div>
       )}

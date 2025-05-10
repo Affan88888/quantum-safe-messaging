@@ -107,13 +107,13 @@ const Main = () => {
             className={`toggle-button ${isChatSidebar ? 'active' : ''}`}
             onClick={() => setIsChatSidebar(true)}
           >
-            Chats
+            <h3>Chats</h3>
           </button>
           <button
             className={`toggle-button ${!isChatSidebar ? 'active' : ''}`}
             onClick={() => setIsChatSidebar(false)}
           >
-            Contacts
+            <h3>Contacts</h3>
           </button>
         </div>
 
@@ -161,18 +161,18 @@ const Main = () => {
               <button className="dark-mode-toggle" onClick={toggleDarkMode}>
                 {isDarkMode ? (
                   <>
-                    <span className="icon">🌙</span> Light Mode
+                    <span className="icon">☀️</span><h5>Light Mode</h5>
                   </>
                 ) : (
                   <>
-                    <span className="icon">☀️</span> Dark Mode
+                    <span className="icon">🌙</span><h5>Dark Mode</h5>
                   </>
                 )}
               </button>
 
               {/* Logout Button */}
               <button className="logout-button" onClick={handleLogout}>
-                <i className="fas fa-right-from-bracket icon"></i> Logout
+                <i className="fas fa-right-from-bracket icon"></i> <h5>Logout</h5>
               </button>
             </div>
           )}

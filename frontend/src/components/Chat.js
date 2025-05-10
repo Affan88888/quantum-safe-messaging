@@ -152,7 +152,7 @@ const Chat = ({ selectedChat, user }) => {
           placeholder="Type a message..."
         />
         <button className="send-button" onClick={handleSendMessage}>
-          Send
+          <h5>Send</h5>
         </button>
       </div>
     </div>

@@ -26,7 +26,7 @@ const ChatSidebar = ({ chats, selectedChat, setSelectedChat, isDarkMode }) => {
             </div>
           ))
         ) : (
-          <div className="no-chats">No chats found.</div>
+          <div className="no-chats"><h5>No chats found.</h5></div>
         )}
       </div>
     </div>
