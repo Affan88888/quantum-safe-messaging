@@ -8,7 +8,6 @@ const ChatSidebar = ({ chats, selectedChat, setSelectedChat, isDarkMode }) => {
     <div className={`chat-sidebar ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
       <div className="sidebar-header">
           <div className="title"><h3>Chats</h3></div>
-        <button className="new-chat-button">New Chat</button>
       </div>
       <div className="chat-list">
         {chats.length > 0 ? (

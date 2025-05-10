@@ -121,12 +121,16 @@ const Main = () => {
 
         {/* Conditional Rendering of Sidebars */}
         {isChatSidebar ? (
-          <ChatSidebar chats={chats} selectedChat={selectedChat} setSelectedChat={setSelectedChat} isDarkMode={isDarkMode}/>
+          <ChatSidebar chats={chats} 
+            selectedChat={selectedChat} 
+            setSelectedChat={setSelectedChat} 
+            isDarkMode={isDarkMode}/>
         ) : (
           <ContactSidebar
             contacts={contacts}
             onAddContact={handleAddContact}
             onStartChat={handleStartChat}
+            isDarkMode={isDarkMode}
           />
         )}
       </div>

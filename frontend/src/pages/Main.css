@@ -5,6 +5,15 @@
   font-family: Arial, sans-serif;
 }
 
+/* Sidebar */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 300px; /* Fixed width for the sidebar */
+  height: 100%; /* Full height of the main container */
+  border-right: 1px solid #ddd;
+}
+
 /* Light Mode */
 .light-mode {
   background-color: #f0f2f5;
@@ -74,6 +83,18 @@
 }
 
 /* Common Styles */
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+ }
+
+.title {
+  font-size: 1.2rem; 
+}
+
 .sidebar h1 {
   margin: 0;
   padding: 15px;

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import './ContactSidebar.css';
 
-const ContactSidebar = ({ onAddContact, onStartChat }) => {
+const ContactSidebar = ({ onAddContact, onStartChat, isDarkMode }) => {
   const [newContactEmail, setNewContactEmail] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -162,20 +162,23 @@ const handleChat = async (contactId, contactName) => {
   };
 
   return (
-    <div className="contact-sidebar">
+    <div className={`contact-sidebar ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
+      {/* Sidebar Header */}
       <div className="sidebar-header">
-        <h2>Contacts</h2>
+        <div className="title"><h3>Contacts</h3></div>
         <button className="add-contact-button" onClick={openModal}>
           Add Contact
         </button>
       </div>
+
+      {/* Contact List */}
       <div className="contact-list">
         {contacts.length > 0 ? (
           contacts.map((contact) => (
             <div
               key={contact.id}
               className="contact-item"
-              onContextMenu={(e) => handleRightClick(e, contact)} // Handle right-click
+              onContextMenu={(e) => handleRightClick(e, contact)}
             >
               <div className="contact-avatar">{contact.username[0]}</div>
               <div className="contact-info">
@@ -224,13 +227,17 @@ const handleChat = async (contactId, contactName) => {
         >
           <button
             className="context-menu-option"
-            onClick={() => handleChat(contextMenu.contactId, contextMenu.contactName)}
+            onClick={() =>
+              handleChat(contextMenu.contactId, contextMenu.contactName)
+            }
           >
             Chat
           </button>
           <button
             className="context-menu-option"
-            onClick={() => handleDelete(contextMenu.contactId, contextMenu.contactName)}
+            onClick={() =>
+              handleDelete(contextMenu.contactId, contextMenu.contactName)
+            }
           >
             Delete
           </button>
@@ -238,7 +245,9 @@ const handleChat = async (contactId, contactName) => {
       )}
 
       {/* Close context menu when clicking outside */}
-      {contextMenu && <div className="context-menu-overlay" onClick={handleCloseContextMenu}></div>}
+      {contextMenu && (
+        <div className="context-menu-overlay" onClick={handleCloseContextMenu}></div>
+      )}
     </div>
   );
 };
