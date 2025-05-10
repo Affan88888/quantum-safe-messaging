@@ -1,77 +1,103 @@
 /* src/pages/SignUp.css */
 
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%; /* ensures full screen height */
+}
+
+.background {
+  background-color: #CACACA;
+  min-height: 100vh; /* full viewport height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .signup-container {
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    text-align: center;
-  }
-  
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+  background: #CACACA;
+  border-radius: 10px;
+  border: 1px solid #FBA400;
+  z-index: 1;
+  box-shadow: 0 0 10px #E56216, 0 0 5px #0F0F0F;
+}
 .signup-container h1 {
-    margin-bottom: 20px;  
-    transition: transform 0.3s ease-in-out;
-  }
-.signup-container h1:hover {
-    transform: translateY(-5px); 
-  }
+  font-size: 2rem;
+  color: #FBA400;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
   
 .signup-container  p {
-    margin-bottom: 30px;
-  }
+  color: #2d2e2e;
+  margin-bottom: 2rem;
+  font-size: 16px;
+}
   
-  .signup-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .form-group {
-    text-align: left;
-  }
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  text-align: left;
+}
   
 .signup-container label {
-    font-weight: bold;
-    margin-bottom: 5px;
-    display: block;
-  }
-  
-.signup-container input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-  }
-  
-  .signup-button {
-    display: inline-block;
-    width: 100%;
-    padding: 10px;
-    background-color: #28a745;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-family: 'Orbitron';
-  }
-  
-  .signup-button:hover {
-    background-color: #218838;
-  }
-  
-  .login-link {
-    margin-top: 20px;
-  }
-  
-  .login-link a {
-    color: #007bff;
-    text-decoration: none;
-  }
-  
-  .login-link a:hover {
-    text-decoration: underline;
-  }
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: block;
+}
 
-  /*.home-button styling is in the Login.css file*/
+.signup-container input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #0F0F0F;
+  border-radius: 10px;
+  font-size: 16px;
+  background: #A1A1A1;
+  font-family: 'Orbitron', sans-serif;
+}
+
+
+.signup-button {
+  display: inline-block;
+  width: 100%;
+  padding: 10px;
+  background: #FBA400;
+  color: #0F0F0F;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;/*1 rem*/
+  cursor: pointer;
+  transition: 0.3s ease; /* all */
+  margin-top: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+.signup-button:hover {
+  background-color: #E56216;
+}
+
+.login-link {
+  margin-top: 20px;
+}
+
+.login-link a {
+  color: #FBA400;
+  text-decoration: none;
+}
+.login-link a:hover {
+  text-shadow: 0.5px 0.5px 1px black;
+  text-decoration: underline;
+}
+
+
+/*.home-button styling is in the Login.css file*/
