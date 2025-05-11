@@ -124,6 +124,9 @@ const handleChat = async (contactId, contactName) => {
 
       // Call the onStartChat function passed as a prop
       onStartChat(contact);
+
+      // Refresh the page to reflect the new chat
+      window.location.reload();
     }
   } catch (error) {
     console.error('Error creating chat:', error);
