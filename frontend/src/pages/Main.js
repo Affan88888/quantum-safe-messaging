@@ -13,15 +13,21 @@ const Main = () => {
 
   // State for chats
   const [chats, setChats] = useState([]);
-
   // State for contacts
   const [contacts, setContacts] = useState([]);
-
   // State to track the currently selected chat
   const [selectedChat, setSelectedChat] = useState(null);
-
   // State to toggle between "Chats" and "Contacts"
   const [isChatSidebar, setIsChatSidebar] = useState(true);
+  // State for dark mode
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  // State to control the visibility of the settings menu
+  const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
+
+  // Function to toggle dark mode
+  const toggleDarkMode = () => {
+    setIsDarkMode((prevMode) => !prevMode);
+  };
 
   // Function to fetch chats from the backend
   const fetchChats = async () => {
@@ -90,7 +96,7 @@ const Main = () => {
   };
 
   return (
-    <div className="main-container">
+    <div className={`main-container ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
       {/* Sidebar */}
       <div className="sidebar">
         <h1>{user ? `Welcome ${user.username}!` : 'Loading...'}</h1>
@@ -101,26 +107,79 @@ const Main = () => {
             className={`toggle-button ${isChatSidebar ? 'active' : ''}`}
             onClick={() => setIsChatSidebar(true)}
           >
-            Chats
+            <h3>Chats</h3>
           </button>
           <button
             className={`toggle-button ${!isChatSidebar ? 'active' : ''}`}
             onClick={() => setIsChatSidebar(false)}
           >
-            Contacts
+            <h3>Contacts</h3>
           </button>
         </div>
 
         {/* Conditional Rendering of Sidebars */}
         {isChatSidebar ? (
-          <ChatSidebar chats={chats} selectedChat={selectedChat} setSelectedChat={setSelectedChat} />
+          <ChatSidebar
+            chats={chats}
+            selectedChat={selectedChat}
+            setSelectedChat={setSelectedChat}
+            isDarkMode={isDarkMode}
+          />
         ) : (
           <ContactSidebar
             contacts={contacts}
             onAddContact={handleAddContact}
             onStartChat={handleStartChat}
+            isDarkMode={isDarkMode}
           />
         )}
+
+        {/* Settings Button */}
+      <div className="settings-button-container">
+          {/* Settings Button */}
+          <button className="settings-button">
+            {/* Icon with onClick handler */}
+            <span
+              className="icon"
+              onClick={() => setIsSettingsMenuOpen((prev) => !prev)}
+            >
+              ⚙️
+            </span>
+            {/* Text shown on hover */}
+            <span className="settings-text">Settings</span>
+          </button>
+          
+          {/* Settings Menu */}
+          {isSettingsMenuOpen && (
+            <div className="settings-menu">
+              {/* Close Button */}
+              <button
+                className="close-button"
+                onClick={() => setIsSettingsMenuOpen(false)}
+              >
+                &times; {/* Unicode for "X" symbol */}
+              </button>
+
+              {/* Dark Mode Toggle Button */}
+              <button className="dark-mode-toggle" onClick={toggleDarkMode}>
+                {isDarkMode ? (
+                  <>
+                    <span className="icon">☀️</span><h5>Light Mode</h5>
+                  </>
+                ) : (
+                  <>
+                    <span className="icon">🌙</span><h5>Dark Mode</h5>
+                  </>
+                )}
+              </button>
+
+              {/* Logout Button */}
+              <button className="logout-button" onClick={handleLogout}>
+                <i className="fas fa-right-from-bracket icon"></i> <h5>Logout</h5>
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Main Content */}
@@ -133,11 +192,6 @@ const Main = () => {
           </div>
         )}
       </div>
-
-      {/* Logout Button */}
-      <button className="logout-button" onClick={handleLogout}>
-        Logout
-      </button>
     </div>
   );
 };

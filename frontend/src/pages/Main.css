@@ -2,99 +2,106 @@
 .main-container {
   display: flex;
   height: 100vh;
-  background-color: #f0f2f5;
   font-family: Arial, sans-serif;
 }
 
+.main-container h1, h3, h5{
+  font-family: 'Orbitron';
+}
+
 /* Sidebar */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 300px; /* Fixed width for the sidebar */
+  height: 100%; /* Full height of the main container */
+  border-right: 1px solid #ddd;
+  overflow-y: auto;
+}
+
+/* Light Mode */
+.light-mode {
+  background-color: #f0f2f5;
+  color: #000000;
+}
+
+.light-mode .sidebar h1 {
+  background-color: #f0f2f5;
+  color: #000000;
+}
+
+.light-mode .main-content {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.light-mode .timestamp {
+  color: #999;
+}
+
+.light-mode .toggle-button.active {
+  background-color: #0084ff;
+  color: white;
+}
+
+.light-mode .toggle-button {
+  color: #666;
+}
+
+/* Dark Mode */
+.dark-mode {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+.dark-mode .sidebar h1 {
+  background-color: #1e1e1e;
+  color: #ffffff;
+}
+
+.dark-mode .main-content {
+  background-color: #1e1e1e;
+  color: #ffffff;
+}
+
+.dark-mode .timestamp {
+  color: #aaaaaa;
+}
+
+.dark-mode .toggle-button.active {
+  background-color: #0084ff;
+  color: white;
+}
+
+.dark-mode .toggle-button {
+  color: #cccccc;
+}
+
+/* Common Styles */
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+ }
+
+.title {
+  font-size: 1.2rem; 
+}
+
 .sidebar h1 {
   margin: 0;
   padding: 15px;
   font-size: 1.5rem;
   text-align: center;
-  background-color: #f0f2f5;
-  color: #000000;
   border-bottom: 1px solid #ddd;
 }
 
-/* Main content */
 .main-content {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: #ffffff;
-}
-
-.chat-header {
-  display: flex;
-  align-items: center;
-  padding: 15px;
-  border-bottom: 1px solid #ddd;
-  color: #000000;
-}
-
-.message-list {
-  flex: 1;
-  padding: 15px;
-  overflow-y: auto;
-}
-
-.message {
-  display: flex;
-  margin-bottom: 10px;
-  color: #000000;
-}
-
-.message.received {
-  justify-content: flex-start;
-}
-
-.message.sent {
-  justify-content: flex-end;
-}
-
-.message-content {
-  max-width: 70%;
-  padding: 10px;
-  border-radius: 10px;
-  font-size: 14px;
-}
-
-.message.received .message-content {
-  background-color: #ebebeb;
-}
-
-.message.sent .message-content {
-  background-color: #dcf8c6;
-}
-
-.timestamp {
-  font-size: 10px;
-  color: #999;
-  margin-top: 2px;
-}
-
-.message-input {
-  display: flex;
-  padding: 10px;
-  border-top: 1px solid #ddd;
-}
-
-.message-input input {
-  flex: 1;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 20px;
-  margin-right: 10px;
-}
-
-.send-button {
-  background-color: #0084ff;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 20px;
-  cursor: pointer;
 }
 
 .no-chat-selected {
@@ -103,23 +110,8 @@
   align-items: center;
   height: 100%;
   font-size: 16px;
-  color: #666;
 }
 
-/* Logout button */
-.logout-button {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  background-color: #ff4d4d;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-/* Toggle Buttons */
 .toggle-buttons {
   display: flex;
   justify-content: space-around;
@@ -129,7 +121,6 @@
 
 .toggle-button {
   background-color: transparent;
-  color: #666;
   border: none;
   padding: 8px 12px;
   cursor: pointer;
@@ -137,7 +128,107 @@
   border-radius: 5px;
 }
 
-.toggle-button.active {
-  background-color: #0084ff;
-  color: white;
+/* Settings Button Container */
+.settings-button-container {
+  margin-top: auto; /* Pushes the button to the bottom of the sidebar */
+  position: relative; /* Allows positioning of the popup menu */
+}
+
+/* Settings Button */
+.settings-button {
+  width: auto; /* Adjust width to fit content */
+  padding: 10px; /* Remove padding from the button */
+  border: none;
+  background-color: transparent; /* No background color */
+  cursor: default; /* Default cursor for the button */
+}
+
+/* Icon Styling */
+.settings-button .icon {
+  font-size: 34px; /* Adjust the size of the icon */
+  cursor: pointer; /* Change cursor to pointer for clickable icon */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Settings Menu */
+.settings-menu {
+  position: absolute;
+  bottom: 50px; /* Position above the settings button */
+  left: 50px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 103px;
+  z-index: 10;
+}
+
+/* Settings Text */
+.settings-button .settings-text {
+  margin-right: 8px; /* Add spacing between icon and text */
+  font-size: 14px; /* Set font size for the text */
+  color: #666; /* Default text color (light gray) */
+  opacity: 0; /* Hide the text by default */
+  transition: opacity 0.2s ease;
+  font-family: 'Orbitron'; /* Smooth transition for fade-in effect */
+}
+
+/* Show the text on hover */
+.settings-button:hover .settings-text {
+  opacity: 1; /* Make the text visible */
+}
+
+/* Settings Menu in Dark Mode */
+.dark-mode .settings-menu {
+  background-color: #1e1e1e; /* Dark background in dark mode */
+  border: 1px solid #444; /* Darker border in dark mode */
+  color: #ffffff; /* White text in dark mode */
+}
+
+/* Buttons Inside Settings Menu */
+.settings-menu button {
+  width: 100%;
+  padding: 10px 15px;
+  text-align: left;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Buttons Inside Settings Menu in Light Mode */
+.light-mode .settings-menu button {
+  color: #000000;
+  background-color:white; /* Black text in light mode */
+}
+
+/* Buttons Inside Settings Menu in Dark Mode */
+.dark-mode .settings-menu button {
+  color: #ffffff;
+  background-color:black; /* White text in dark mode */
+}
+
+.light-mode .settings-menu button:hover {
+  background-color: rgb(230, 230, 230); /* Hover effect in light mode */
+}
+
+.dark-mode .settings-menu button:hover {
+  background-color: #333333; /* Hover effect in dark mode */
+}
+
+/* Close Button */
+.settings-menu .close-button {
+  position: absolute;
+  top: 0px; /* Slightly offset from the top */
+  right: 0px; /* Slightly offset from the right */
+  background-color: transparent; /* No background color */
+  border: none; /* No border */
+  font-size: 20px; /* Size of the "X" */
+  cursor: pointer; /* Pointer cursor for clickable icon */
+  color: #666; /* Gray color for light mode */
+  padding: 0; /* Remove padding to limit clickable area */
+  width: auto; /* Allow width to adjust based on content */
+  height: auto; /* Allow height to adjust based on content */
+  line-height: 1; /* Ensure proper vertical alignment */
 }

@@ -1,4 +1,3 @@
--KRENUTI IMPLEMENTIRATI WEBSOCKETS
 -PROVJERITI HomePage.css. Neke stvari ne rade to jest dzaba su callane u fajlu
 -NAPRAVITI HAPROXY DA RADI SKROZ
 -FIXATI HAPROXY NA LAPTOPU

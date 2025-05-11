@@ -3,12 +3,11 @@
 import React from 'react';
 import './ChatSidebar.css';
 
-const ChatSidebar = ({ chats, selectedChat, setSelectedChat }) => {
+const ChatSidebar = ({ chats, selectedChat, setSelectedChat, isDarkMode }) => {
   return (
-    <div className="chat-sidebar">
+    <div className={`chat-sidebar ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
       <div className="sidebar-header">
-        <h2>Chats</h2>
-        <button className="new-chat-button">New Chat</button>
+          <div className="title"><h3>Chats</h3></div>
       </div>
       <div className="chat-list">
         {chats.length > 0 ? (
@@ -27,7 +26,7 @@ const ChatSidebar = ({ chats, selectedChat, setSelectedChat }) => {
             </div>
           ))
         ) : (
-          <div className="no-chats">No chats found.</div>
+          <div className="no-chats"><h5>No chats found.</h5></div>
         )}
       </div>
     </div>

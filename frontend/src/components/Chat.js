@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
+import './Chat.css';
 
 const socket = io('http://localhost:5000', {
   withCredentials: true,
@@ -151,7 +152,7 @@ const Chat = ({ selectedChat, user }) => {
           placeholder="Type a message..."
         />
         <button className="send-button" onClick={handleSendMessage}>
-          Send
+          <h5>Send</h5>
         </button>
       </div>
     </div>
