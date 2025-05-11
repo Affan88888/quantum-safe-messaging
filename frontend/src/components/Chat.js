@@ -119,6 +119,13 @@ const Chat = ({ selectedChat, user }) => {
     }
   };
 
+  // Handle Enter key press
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleSendMessage();
+    }
+  };
+
   return (
     <div className="chat-container">
       {/* Chat Header */}
@@ -143,6 +150,7 @@ const Chat = ({ selectedChat, user }) => {
           type="text"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
+          onKeyDown={handleKeyDown}
           placeholder="Type a message..."
         />
         <button className="send-button" onClick={handleSendMessage}>
