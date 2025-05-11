@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Hook for navigation
 import { useUser } from '../services/UserContext'; // Import the useUser hook
+import socket from '../services/SocketService'; // Import the centralized socket
 import './Login.css'; // Import the CSS file for styling
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
@@ -33,6 +34,9 @@ const Login = () => {
       if (response.ok) {
         // Call the login function to update the context with the user data
         login(data.user);
+
+        // Explicitly connect the WebSocket after successful login
+        socket.connect();
 
         // If login is successful, redirect to the /main page
         navigate('/main');

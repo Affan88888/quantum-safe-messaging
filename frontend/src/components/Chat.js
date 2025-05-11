@@ -1,12 +1,7 @@
 // src/components/Chat.js
-
 import React, { useState, useEffect } from 'react';
-import io from 'socket.io-client';
+import socket from '../services/SocketService'; // Import the centralized socket
 import './Chat.css';
-
-const socket = io('http://localhost:5000', {
-  withCredentials: true,
-});
 
 const Chat = ({ selectedChat, user }) => {
   const [messages, setMessages] = useState([]);
@@ -49,7 +44,6 @@ const Chat = ({ selectedChat, user }) => {
     if (!selectedChat) return;
 
     socket.on('receive_message', (message) => {
-
       // Ensure the message belongs to the currently selected chat
       if (message.chat_id === selectedChat.id) {
         setMessages((prevMessages) => {
