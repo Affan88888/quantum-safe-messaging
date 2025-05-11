@@ -43,6 +43,24 @@ def get_user_by_email(email):
         cursor.close()
         connection.close()
 
+def get_user_by_email_or_username(identifier):
+    """Retrieve a user by either email or username."""
+    connection = get_db_connection()
+    if not connection:
+        return None
+
+    try:
+        cursor = connection.cursor(dictionary=True)
+        query = "SELECT * FROM users WHERE email = %s OR username = %s"
+        cursor.execute(query, (identifier, identifier))
+        return cursor.fetchone()
+    except Exception as e:
+        print(f"Error fetching user by email or username: {e}")
+        return None
+    finally:
+        cursor.close()
+        connection.close()
+
 
 def get_user_by_id(user_id):
     """Retrieve a user from the database by ID."""

@@ -54,14 +54,15 @@ const Login = () => {
         <p>Please enter your credentials to log in.</p>
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
-            <label htmlFor="email">Email:</label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+          <label htmlFor="email">Email or Username:</label>
+          <input
+            type="text"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+
           </div>
           <div className="form-group">
             <label htmlFor="password">Password:</label>
