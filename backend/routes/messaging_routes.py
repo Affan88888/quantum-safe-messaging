@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify, session
 from flask_socketio import SocketIO, emit, join_room
 from models.messaging_model import save_message_to_db, get_chat_history_from_db
-from models.chat_model import get_chats_for_user
+from models.chats_model import get_chats_for_user
 from utils.helpers import decrypt_session
 from datetime import datetime
 
