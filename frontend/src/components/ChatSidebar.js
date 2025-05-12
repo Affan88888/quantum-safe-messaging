@@ -4,6 +4,11 @@ import './ChatSidebar.css';
 
 // Helper function to format the timestamp
 const formatTimestamp = (timestamp) => {
+  // Check if the timestamp is null or undefined
+  if (!timestamp) {
+    return ''; // Return an empty string if there's no timestamp
+  }
+
   const now = new Date(); // Current date and time
   const messageDate = new Date(timestamp); // Parse the timestamp
 
@@ -60,7 +65,7 @@ const ChatSidebar = ({ chats, selectedChat, setSelectedChat, isDarkMode }) => {
                 <div className="chat-avatar">{chat.name[0]}</div>
                 <div className="chat-info">
                   <div className="chat-name">{chat.name}</div>
-                  <div className="last-message">{chat.last_message}</div>
+                  <div className="last-message">{chat.last_message || 'No messages yet'}</div>
                 </div>
                 <div className="timestamp">{formattedTime}</div>
               </div>
