@@ -1,5 +1,6 @@
 from datetime import datetime
 from utils.db import get_db_connection
+from datetime import datetime
 
 def save_message_to_db(chat_id, sender_id, content):
     """
@@ -16,7 +17,8 @@ def save_message_to_db(chat_id, sender_id, content):
         INSERT INTO messages (chat_id, sender_id, content, created_at)
         VALUES (%s, %s, %s, %s)
         """
-        cursor.execute(query, (chat_id, sender_id, content, datetime.now()))
+        # Use datetime.utcnow() to save the current GMT/UTC time
+        cursor.execute(query, (chat_id, sender_id, content, datetime.utcnow()))
         connection.commit()
 
         # Retrieve the auto-generated ID of the inserted message
