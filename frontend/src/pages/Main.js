@@ -24,9 +24,43 @@ const Main = () => {
   // State to control the visibility of the settings menu
   const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
 
+  // Apply the user's theme preference on mount
+  useEffect(() => {
+    if (user?.theme === 'dark') {
+      setIsDarkMode(true);
+    } else {
+      setIsDarkMode(false);
+    }
+  }, [user]);
+
+  // Function to update the user's theme preference in the backend
+  const updateThemePreference = async (newTheme) => {
+    try {
+      const response = await fetch('http://localhost:5000/api/theme/update-theme', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ theme: newTheme }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update theme');
+      }
+
+      const data = await response.json();
+      console.log(data.message); // Log success message
+    } catch (error) {
+      console.error('Error updating theme preference:', error);
+    }
+  };
+
   // Function to toggle dark mode
   const toggleDarkMode = () => {
-    setIsDarkMode((prevMode) => !prevMode);
+    const newMode = !isDarkMode;
+    setIsDarkMode(newMode);
+
+    // Update the theme preference in the backend
+    updateThemePreference(newMode ? 'dark' : 'light');
   };
 
   // Function to fetch chats from the backend
@@ -135,7 +169,7 @@ const Main = () => {
         )}
 
         {/* Settings Button */}
-      <div className="settings-button-container">
+        <div className="settings-button-container">
           {/* Settings Button */}
           <button className="settings-button">
             {/* Icon with onClick handler */}
@@ -148,7 +182,7 @@ const Main = () => {
             {/* Text shown on hover */}
             <span className="settings-text">Settings</span>
           </button>
-          
+
           {/* Settings Menu */}
           {isSettingsMenuOpen && (
             <div className="settings-menu">

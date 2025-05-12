@@ -13,7 +13,10 @@ def create_user(username, email, password):
 
     try:
         cursor = connection.cursor()
-        query = "INSERT INTO users (username, email, password_hash) VALUES (%s, %s, %s)"
+        query = """
+        INSERT INTO users (username, email, password_hash)
+        VALUES (%s, %s, %s)
+        """
         cursor.execute(query, (username, email, password_hash))
         connection.commit()
         return True
@@ -33,7 +36,7 @@ def get_user_by_email(email):
 
     try:
         cursor = connection.cursor(dictionary=True)
-        query = "SELECT * FROM users WHERE email = %s"
+        query = "SELECT id, username, email, password_hash, theme FROM users WHERE email = %s"
         cursor.execute(query, (email,))
         return cursor.fetchone()
     except Exception as e:
@@ -52,7 +55,7 @@ def get_user_by_id(user_id):
 
     try:
         cursor = connection.cursor(dictionary=True)
-        query = "SELECT * FROM users WHERE id = %s"
+        query = "SELECT id, username, email, theme FROM users WHERE id = %s"
         cursor.execute(query, (user_id,))
         return cursor.fetchone()
     except Exception as e:
@@ -85,7 +88,8 @@ def check_auth_status(session):
             return {
                 'id': user['id'],
                 'username': user['username'],
-                'email': user['email']
+                'email': user['email'],
+                'theme': user['theme']  # Include the theme property
             }
     except ValueError as e:
         print(f"Error validating session: {e}")

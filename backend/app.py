@@ -6,7 +6,8 @@ from flask_socketio import SocketIO
 from routes.auth_routes import auth_bp
 from routes.contact_routes import contact_bp
 from routes.chats_routes import chat_bp
-from routes.messaging_routes import messaging_bp, socketio  # Import messaging routes and SocketIO
+from routes.messaging_routes import messaging_bp, socketio
+from routes.user_theme_routes import theme_bp
 from config import SECRET_KEY
 
 app = Flask(__name__)
@@ -24,7 +25,8 @@ app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # Protect against CSRF attacks
 app.register_blueprint(auth_bp, url_prefix='/api/auth')
 app.register_blueprint(contact_bp, url_prefix='/api/contact')
 app.register_blueprint(chat_bp, url_prefix='/api/chats')
-app.register_blueprint(messaging_bp, url_prefix='/api/messaging')  # Register messaging blueprint
+app.register_blueprint(messaging_bp, url_prefix='/api/messaging')
+app.register_blueprint(theme_bp, url_prefix = '/api/theme')
 
 # Initialize SocketIO with the app
 socketio.init_app(app, cors_allowed_origins="http://localhost:3000")  # Allow frontend origin for WebSocket
