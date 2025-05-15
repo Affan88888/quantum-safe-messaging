@@ -113,7 +113,7 @@ hover effect pojedinacno */
   display: flex;
   padding: 4rem 5%;
   align-items: center;
-  background: url('./background_picture/background_image_homescreen2.png');
+  background: url('./background_picture/background_image_homescreen.png');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
