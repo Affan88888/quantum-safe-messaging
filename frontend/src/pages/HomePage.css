@@ -34,10 +34,10 @@ body::before {
   justify-content: space-between;
   align-items: center;
   padding: 1rem 1rem;
-  background-color: rgba(202, 202, 202, 0.95); /* #CACACA with 95% opacity, morao pretvoriti da bi radio opacity */
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px); /* Safari support */
-  border-bottom: 5px solid #FBA400;
+  background-color: rgba(190, 233, 232, 0.9); /* #BEE9E8 with 90% opacity, morao pretvoriti da bi radio opacity */
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px); /* Safari support */
+  border-bottom: 1px solid #1b4965;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -46,10 +46,9 @@ body::before {
 .navbar-logo {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #FBA400;
+  color: #1b4965;
   width: 40px;
   height: 40px;
-  border-radius: 50%;
   padding: 1rem 5rem;
   display: flex;
   align-items: center;
@@ -78,21 +77,20 @@ body::before {
 hover effect pojedinacno */
 .navbar .login-button {
   background: transparent;
-  color: #FBA400;
-  border-color: #FBA400;
-  text-shadow: 1px 1px 3px black; 
+  color: #1b4965;
+  border-color: #1b4965;
 }
 .navbar .login-button:hover {
-  background: #A1A1A1;
+  background: #bee9e8;
 }
 
 .navbar .signup-button {
-  background-color: #FBA400;
-  color: #2D2E2E;
-  border-color: #2D2E2E;
+  background-color: #1b4965;
+  color: #bee9e8;
+  border-color: #1b4965;
 }
 .navbar .signup-button:hover {
-  background: #A1A1A1;
+  background: #62b6cb;
 }
 
 .navbar-buttons{
@@ -115,7 +113,7 @@ hover effect pojedinacno */
   display: flex;
   padding: 4rem 5%;
   align-items: center;
-  background: url('./background_picture/background_image_homescreen.png');
+  background: url('./background_picture/background_image_homescreen2.png');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -128,13 +126,13 @@ h1 {
   font-weight: bold;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: #0F0F0F;
+  color: #bee9e8;
 }
 .hero-section p {
   font-size: 1.2rem;
   margin-top: 10px;
   letter-spacing: 2px;
-  color: #2D2E2E;
+  color: #5fa8d3;
   margin-bottom: 2rem;
 }
 
@@ -161,21 +159,17 @@ h1 {
 hover effect pojedinacno */
 .hero-section .learn-more {
   background: transparent;
-  color: #FBA400;
-  border-color: #FBA400;
-  text-shadow: 1px 1px 3px black; 
-}
-.hero-section .learn-more:hover {
-  background: #A1A1A1;
+  color: #bee9e8;
+  border-color: #bee9e8;
 }
 
 .hero-section .get-started {
-  background-color: #FBA400;
-  color: #2D2E2E;
-  border-color: #2D2E2E;
+  background-color: #bee9e8;
+  color: #1b4965;
+  border-color: #1b4965;
 }
 .hero-section .get-started:hover {
-  background: #A1A1A1;
+  background: #bee9e8;
 }
 
 .hero-buttons {
@@ -206,7 +200,7 @@ hover effect pojedinacno */
 .features{
   padding: 4rem 5%;
   text-align: center;
-  background-color: #EDEDED;
+  background-color: #bee9e8;
 }
 .features-grid{
   display: grid;
@@ -215,7 +209,8 @@ hover effect pojedinacno */
   margin-top: 3rem;
 }
 .features-card{
-  background-color: #cecece;
+  background-color: #bee9e8;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   padding: 2rem;
   border-radius: 10px;
   transition: transform 0.3s;
@@ -229,21 +224,26 @@ hover effect pojedinacno */
 }
 
 .features h2 {
+  letter-spacing: 2px;
   font-size: 1.8rem;
   margin-bottom: 20px;
-  color: #FBA400;
+  color: #1b4965;
 }
 .features h3{
-  color: #0F0F0F
+  letter-spacing: 2px;
+  color: #1b4965
 }
 .features p{
-  color: #2D2E2E;
+  margin-top: 10px;
+  letter-spacing: 2px;
+  margin-bottom: 2rem;
+  color: #1b4965;
 }
 
 /* tecnologies used */
 .tech-section{
   padding: 4rem 5%;
-  background-color: #CACACA;
+  background-color: #1b4965;
   text-align: center;
 }
 .tech-section h2{
@@ -252,10 +252,10 @@ hover effect pojedinacno */
   font-size: 1.8rem;
   margin-bottom: 20px;
   text-shadow: 1px 1px 1px black; 
-  color: #FBA400;
+  color: #bee9e8;
 }
 .tech-section span{
-  color: #0F0F0F;
+  color: #bee9e8;
 }
 
 .tech-card{
@@ -310,6 +310,64 @@ hover effect pojedinacno */
   transform: scale(1.15);
 }
 
+/* Learn More Section */
+
+.learn-more {
+  padding: 4rem 2rem;
+  background-color: #bee9e8;
+}
+
+.learn-more-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4rem;
+  flex-wrap: wrap;
+}
+
+.learn-more-section.reverse {
+  flex-direction: row-reverse;
+}
+
+.learn-more-text {
+  flex: 1;
+  min-width: 300px;
+  padding: 1rem 2rem;
+}
+
+.learn-more-text h2 {
+  letter-spacing: 2px;
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: #1b4965;
+}
+
+.learn-more-text p {
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  color: #1b4965;
+  line-height: 1.6;
+}
+
+.learn-more-image {
+  flex: 1;
+  min-width: 300px;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.learn-more-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 
 
 /* Animation */
@@ -342,5 +400,24 @@ hover effect pojedinacno */
   
   .tech-stack {
     gap: 1rem;
+  }
+
+  .learn-more-section,
+  .learn-more-section.reverse {
+    flex-direction: column;
+  }
+
+  .learn-more-image,
+  .learn-more-text {
+    padding: 1rem 0;
+    text-align: center;
+  }
+
+  .learn-more-text h2 {
+    font-size: 1.5rem;
+  }
+
+  .learn-more-text p {
+    font-size: 1rem;
   }
 }
