@@ -1,7 +1,7 @@
+from utils.helpers import encrypt_session  # Ensure this matches your actual file structure
+from passlib.hash import argon2
 from flask import Blueprint, request, jsonify, session
-from models.user_model import create_user, get_user_by_email, check_auth_status
-from utils.helpers import encrypt_session
-from werkzeug.security import check_password_hash
+from models.user_model import create_user, get_user_by_email
 import oqs
 
 auth_bp = Blueprint('auth', __name__)
@@ -16,28 +16,19 @@ def signup():
     if not all([username, email, password]):
         return jsonify({'error': 'All fields are required'}), 400
 
-    # Create the user in the database
     if create_user(username, email, password):
-        # Generate the client's key pair
         kemalg = "ML-KEM-512"
         with oqs.KeyEncapsulation(kemalg) as client:
             public_key_client = client.generate_keypair()
-            private_key_client = client.export_secret_key()  # Export the private key
+            private_key_client = client.export_secret_key()
 
-        # Fetch the newly created user from the database
         user = get_user_by_email(email)
-        if not user:
-            return jsonify({'error': 'Failed to retrieve user after registration'}), 500
-
-        # Encrypt session data using the utility function
         encrypted_session = encrypt_session(user['id'], public_key_client)
 
-        # Store session data securely
         session['encrypted_session_data'] = encrypted_session['encrypted_session_data']
         session['encapsulated_key'] = encrypted_session['encapsulated_key']
         session['private_key'] = private_key_client
 
-        # Return user details along with success message
         return jsonify({
             'message': 'User registered successfully',
             'user': {
@@ -49,7 +40,6 @@ def signup():
     else:
         return jsonify({'error': 'Username or email already exists'}), 409
 
-
 @auth_bp.route('/login', methods=['POST'])
 def login():
     data = request.json
@@ -60,22 +50,18 @@ def login():
         return jsonify({'error': 'Email and password are required'}), 400
 
     user = get_user_by_email(email)
-    if user and check_password_hash(user['password_hash'], password):
-        # Generate the client's key pair
+    if user and argon2.verify(password, user['password_hash']):
         kemalg = "ML-KEM-512"
         with oqs.KeyEncapsulation(kemalg) as client:
             public_key_client = client.generate_keypair()
-            private_key_client = client.export_secret_key()  # Export the private key
+            private_key_client = client.export_secret_key()
 
-        # Encrypt session data using the utility function
         encrypted_session = encrypt_session(user['id'], public_key_client)
 
-        # Store session data securely
         session['encrypted_session_data'] = encrypted_session['encrypted_session_data']
         session['encapsulated_key'] = encrypted_session['encapsulated_key']
         session['private_key'] = private_key_client
 
-        # Return user details along with success message
         return jsonify({
             'message': 'Login successful',
             'user': {

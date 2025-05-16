@@ -1,28 +1,30 @@
-from werkzeug.security import generate_password_hash, check_password_hash
+# user_model.py
+
+from passlib.hash import argon2
 from utils.db import get_db_connection
-from utils.helpers import decrypt_session
-import base64
-import oqs
+import logging
 
 def create_user(username, email, password):
-    """Create a new user in the database."""
-    password_hash = generate_password_hash(password)
-    connection = get_db_connection()
-    if not connection:
-        return False
-
+    """Create a new user in the database using Argon2id password hashing."""
     try:
+        password_hash = argon2.hash(password)  # Secure hashing with Argon2id
+        connection = get_db_connection()
+        if not connection:
+            return False
+
         cursor = connection.cursor()
         query = "INSERT INTO users (username, email, password_hash) VALUES (%s, %s, %s)"
         cursor.execute(query, (username, email, password_hash))
         connection.commit()
         return True
     except Exception as e:
-        print(f"Error creating user: {e}")
+        logging.error(f"Error creating user: {e}")
         return False
     finally:
-        cursor.close()
-        connection.close()
+        if 'cursor' in locals():
+            cursor.close()
+        if 'connection' in locals():
+            connection.close()
 
 
 def get_user_by_email(email):
