@@ -1,102 +1,130 @@
 /* src/pages/Login.css */
 
-.login-container {
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    text-align: center;
-  }
-  
-.login-container h1 {
-    margin-bottom: 20px;  
-    transition: transform 0.3s ease-in-out;
-  }
-.login-container h1:hover {
-    transform: translateY(-5px);
-  }
-  
-.login-container p {
-    margin-bottom: 30px;
-  }
-  
-  .login-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .form-group {
-    text-align: left;
-  }
-  
-.login-container label {
-    font-weight: bold;
-    margin-bottom: 5px;
-    display: block;
-  }
-  
-.login-container input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-  }
-  
-  .login-button {
-    display: inline-block;
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-family: 'Orbitron';
-  }
-  
-  .login-button:hover {
-    background-color: #0056b3;
-  }
-  
-  .signup-link {
-    margin-top: 20px;
-  }
-  
-  .signup-link a {
-    color: #007bff;
-    text-decoration: none;
-  }
-  
-  .signup-link a:hover {
-    text-decoration: underline;
-  }
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%; /* ensures full screen height */
+}
 
-  .home-button {
-    display: inline-flex; /* Use flexbox for better alignment */
-    align-items: center; /* Align items vertically */
-    justify-content: center; /* Center items horizontally */
-    width: 100%;
-    padding: 10px;
-    background-color: #5a6268;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-family: 'Orbitron';
-    margin-top: 10px; /* Add spacing between the signup link and this button */
-    gap: 10px; /* Add spacing between the icon and text */
-  }
-  
-  .home-button:hover {
-    background-color: #343a40; /* Darker green on hover */
-  }
-  
-  /* Style the Font Awesome icon */
-  .home-button i {
-    font-size: 18px; /* Slightly larger icon */
-  }
+.background {
+  background-color: #bee9e8;
+  min-height: 100vh; /* full viewport height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.login-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+  background: #bee9e8;
+  border-radius: 10px;
+  z-index: 1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.login-container h1 {
+  font-size: 2rem;
+  color: #1b4965;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.login-container p {
+  color: #1b4965;
+  margin-bottom: 2rem;
+  font-size: 16px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  color: #1b4965;
+}
+
+.form-group {
+  text-align: left;
+  color: #1b4965;
+}
+
+.login-container label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.login-container input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #1b4965;
+  border-radius: 10px;
+  font-size: 16px;
+  background: #cae9ff;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.login-button {
+  display: inline-block;
+  width: 100%;
+  padding: 10px;
+  background: #1b4965;
+  color: #bee9e8;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;/*1 rem*/
+  cursor: pointer;
+  transition: 0.3s ease; /* all */
+  margin-top: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.login-button:hover {
+  background-color: #5fa8d3;
+}
+
+.signup-link {
+  margin-top: 20px;
+}
+
+.signup-link a {
+  color: #5fa8d3;
+  text-decoration: none;
+}
+
+.signup-link a:hover {
+  text-shadow: 0.5px 0.5px 1px black;
+  text-decoration: underline;
+}
+
+.home-button {
+  display: inline-flex; /* Use flexbox for better alignment */
+  align-items: center; /* Align items vertically */
+  justify-content: center; /* Center items horizontally */
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  color: #1b4965;
+  border: 1px solid #1b4965;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-family: 'Orbitron', sans-serif;
+  margin-top: 10px; /* Add spacing between the signup link and this button */
+  gap: 10px; /* Add spacing between the icon and text */
+  transition: all 0.3s ease;
+}
+
+.home-button:hover {
+  background-color: #5fa8d3;
+}
+
+/* Style the Font Awesome icon */
+.home-button i {
+  font-size: 18px; /* Slightly larger icon */
+}

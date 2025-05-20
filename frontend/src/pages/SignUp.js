@@ -58,60 +58,63 @@ const SignUp = () => {
   };
 
   return (
-    <div className="signup-container">
-      <h1>Sign Up</h1>
-      <p>Please enter your details to create an account.</p>
-      <form onSubmit={handleSubmit} className="signup-form">
-        <div className="form-group">
-          <label htmlFor="username">Username:</label>
-          <input
-            type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="confirm-password">Confirm Password:</label>
-          <input
-            type="password"
-            id="confirm-password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit" className="signup-button">
-          Sign Up
+    //dodao novi glavni div da mogu staviti background
+    <div className='background'>
+      <div className="signup-container">
+        <h1>Sign Up</h1>
+        <p>Please enter your details to create an account.</p>
+        <form onSubmit={handleSubmit} className="signup-form">
+          <div className="form-group">
+            <label htmlFor="username">Username:</label>
+            <input
+              type="text"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="email">Email:</label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Password:</label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="confirm-password">Confirm Password:</label>
+            <input
+              type="password"
+              id="confirm-password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit" className="signup-button">
+            Sign Up
+          </button>
+        </form>
+        <p className="login-link">
+          Already have an account? <a href="/login">Log in here</a>.
+        </p>
+        <button className="home-button" onClick={() => navigate('/')}>
+          <i className="fas fa-arrow-left"></i>Back to Home Page
         </button>
-      </form>
-      <p className="login-link">
-        Already have an account? <a href="/login">Log in here</a>.
-      </p>
-      <button className="home-button" onClick={() => navigate('/')}>
-        <i className="fas fa-arrow-left"></i>Back to Home Page
-      </button>
+      </div>
     </div>
   );
 };

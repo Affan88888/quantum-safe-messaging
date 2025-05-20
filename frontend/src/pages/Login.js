@@ -51,40 +51,44 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      <h1>Login</h1>
-      <p>Please enter your credentials to log in.</p>
-      <form onSubmit={handleSubmit} className="login-form">
-        <div className="form-group">
-          <label htmlFor="email">Email:</label>
+    //dodao novi glavni div da mogu staviti background
+    <div className='background'>
+      <div className="login-container">
+        <h1>Login</h1>
+        <p>Please enter your credentials to log in.</p>
+        <form onSubmit={handleSubmit} className="login-form">
+          <div className="form-group">
+          <label htmlFor="email">Email or Username:</label>
           <input
-            type="email"
+            type="text"
             id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-        </div>
-        <div className="form-group">
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit" className="login-button">
-          Login
+
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Password:</label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit" className="login-button">
+            Login
+          </button>
+        </form>
+        <p className="signup-link">
+          Don't have an account? <a href="/signup">Sign up here</a>.
+        </p>
+        <button className="home-button" onClick={() => navigate('/')}>
+          <i className="fas fa-arrow-left"></i>Back to Home Page
         </button>
-      </form>
-      <p className="signup-link">
-        Don't have an account? <a href="/signup">Sign up here</a>.
-      </p>
-      <button className="home-button" onClick={() => navigate('/')}>
-        <i className="fas fa-arrow-left"></i>Back to Home Page
-      </button>
+      </div>
     </div>
   );
 };

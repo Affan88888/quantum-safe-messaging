@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, session
-from models.user_model import create_user, get_user_by_email, check_auth_status
+from models.user_model import create_user, get_user_by_email_or_username, check_auth_status
 from utils.helpers import encrypt_session
 from werkzeug.security import check_password_hash
 import oqs
@@ -54,13 +54,14 @@ def signup():
 @auth_bp.route('/login', methods=['POST'])
 def login():
     data = request.json
-    email = data.get('email')
+    identifier = data.get('email')  # from frontend, can be username or email
     password = data.get('password')
 
-    if not all([email, password]):
-        return jsonify({'error': 'Email and password are required'}), 400
+    if not all([identifier, password]):
+        return jsonify({'error': 'Username/email and password are required'}), 400
 
-    user = get_user_by_email(email)
+    user = get_user_by_email_or_username(identifier)
+    print(f"Login attempt with: {identifier} => User found: {user}")
     if user and check_password_hash(user['password_hash'], password):
         # Generate the client's key pair
         kemalg = "ML-KEM-512"
