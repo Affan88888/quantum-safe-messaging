@@ -26,3 +26,6 @@ dist/
 
 # Ignore environment variables
 backend/.env
+
+# Ignore .DS_Store
+.DS_Store
