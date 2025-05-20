@@ -1,11 +1,7 @@
 // src/components/Chat.js
-
 import React, { useState, useEffect } from 'react';
-import io from 'socket.io-client';
-
-const socket = io('http://localhost:5000', {
-  withCredentials: true,
-});
+import socket from '../services/SocketService'; // Import the centralized socket
+import './Chat.css';
 
 const Chat = ({ selectedChat, user }) => {
   const [messages, setMessages] = useState([]);
@@ -48,7 +44,6 @@ const Chat = ({ selectedChat, user }) => {
     if (!selectedChat) return;
 
     socket.on('receive_message', (message) => {
-
       // Ensure the message belongs to the currently selected chat
       if (message.chat_id === selectedChat.id) {
         setMessages((prevMessages) => {
@@ -124,6 +119,13 @@ const Chat = ({ selectedChat, user }) => {
     }
   };
 
+  // Handle Enter key press
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleSendMessage();
+    }
+  };
+
   return (
     <div className="chat-container">
       {/* Chat Header */}
@@ -148,10 +150,11 @@ const Chat = ({ selectedChat, user }) => {
           type="text"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
+          onKeyDown={handleKeyDown}
           placeholder="Type a message..."
         />
         <button className="send-button" onClick={handleSendMessage}>
-          Send
+          <h5>Send</h5>
         </button>
       </div>
     </div>

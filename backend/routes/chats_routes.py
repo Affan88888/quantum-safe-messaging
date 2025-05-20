@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, session, request
-from models.chat_model import get_chats_for_user, create_chat
+from models.chats_model import get_chats_for_user, create_chat
 from utils.helpers import decrypt_session
 
 # Create a Blueprint for chat-related routes

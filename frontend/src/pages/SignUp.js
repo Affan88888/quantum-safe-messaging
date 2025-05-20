@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useUser } from '../services/UserContext';
 import { useNavigate } from 'react-router-dom'; // Import the navigation hook
+import socket from '../services/SocketService'; // Import the centralized socket
 import './SignUp.css'; // Import the CSS file for styling
 
 const SignUp = () => {
@@ -37,6 +38,9 @@ const SignUp = () => {
       if (response.ok) {
         // Automatically log the user in
         login(data.user);
+
+        // Explicitly connect the WebSocket after successful sign-up
+        socket.connect();
 
         // Redirect to the main page
         navigate('/main');

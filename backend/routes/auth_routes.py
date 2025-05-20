@@ -43,7 +43,8 @@ def signup():
             'user': {
                 'id': user['id'],
                 'username': user['username'],
-                'email': user['email']
+                'email': user['email'],
+                'theme': user['theme']  # Include the theme property
             }
         }), 201
     else:
@@ -82,7 +83,8 @@ def login():
             'user': {
                 'id': user['id'],
                 'username': user['username'],
-                'email': user['email']
+                'email': user['email'],
+                'theme': user['theme']  # Include the theme property
             }
         }), 200
     else:
