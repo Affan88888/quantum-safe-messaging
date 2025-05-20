@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, session
-from models.user_model import create_user, get_user_by_email_or_username, check_auth_status
+from models.user_model import create_user, get_user_by_email, get_user_by_email_or_username, check_auth_status
 from utils.helpers import encrypt_session
 from werkzeug.security import check_password_hash
 import oqs
@@ -61,7 +61,7 @@ def login():
         return jsonify({'error': 'Username/email and password are required'}), 400
 
     user = get_user_by_email_or_username(identifier)
-    print(f"Login attempt with: {identifier} => User found: {user}")
+
     if user and check_password_hash(user['password_hash'], password):
         # Generate the client's key pair
         kemalg = "ML-KEM-512"

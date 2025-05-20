@@ -4,6 +4,7 @@ import './HomePage.css'; // Import the CSS file
 // ovdje importovati jos jednu sliku
 import latticeImage from './background_picture/lattice-based-cryptography-image.png'; // import photos for learn more
 import ckImage from './background_picture/crystals-kyber-image.png';
+import liboqsLibrary from './background_picture/liboqs_library.png'
 
 const HomePage = () => {
   return (
@@ -97,7 +98,7 @@ const HomePage = () => {
               </p>
             </div>
             <div className='learn-more-image'>
-              <img src='path_to_oqs_image' alt='Open Quantum Safe Project' />
+              <img src={liboqsLibrary} alt='Open Quantum Safe Project' />
             </div>
           </div>
 
