@@ -3,6 +3,7 @@
 from passlib.hash import argon2
 from utils.db import get_db_connection
 import logging
+from utils.helpers import decrypt_session  # ✅ Required
 
 def create_user(username, email, password):
     """Create a new user in the database using Argon2id password hashing."""
@@ -77,20 +78,15 @@ def check_auth_status(session):
         dict or None: User details if the session is valid, otherwise None.
     """
     try:
-        # Decrypt the session to retrieve the user_id using the decrypt_session function
         user_id = decrypt_session(session)
-
-        # Fetch user details from the database using the decrypted user_id
         user = get_user_by_id(user_id)
-
         if user:
             return {
                 'id': user['id'],
                 'username': user['username'],
                 'email': user['email']
             }
-    except ValueError as e:
+    except Exception as e:
         print(f"Error validating session: {e}")
-        return None  # Invalid session data or decryption failure
-
+        return None
     return None

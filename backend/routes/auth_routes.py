@@ -1,11 +1,11 @@
 # routes/auth_routes.py
 
 from flask import Blueprint, request, jsonify, session
-from models.user_model import create_user, get_user_by_email
+from models.user_model import create_user, get_user_by_email, check_auth_status  # ✅ Added check_auth_status
 from utils.helpers import encrypt_session
 from passlib.hash import argon2
 import oqs
-import base64  # 🔍 Required for encoding private key
+import base64
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -32,6 +32,9 @@ def signup():
         session['private_key'] = base64.b64encode(private_key_client).decode()
         session['encrypted_session_data'] = encrypted_session['encrypted_session_data']
         session['encapsulated_key'] = encrypted_session['encapsulated_key']
+
+        session.modified = True
+        session.permanent = True  # Keeps session alive across refreshes
 
         return jsonify({
             'message': 'User registered successfully',
@@ -67,6 +70,9 @@ def login():
         session['encrypted_session_data'] = encrypted_session['encrypted_session_data']
         session['encapsulated_key'] = encrypted_session['encapsulated_key']
 
+        session.modified = True
+        session.permanent = True  # Keeps session alive across refreshes
+
         return jsonify({
             'message': 'Login successful',
             'user': {
@@ -77,3 +83,19 @@ def login():
         }), 200
     else:
         return jsonify({'error': 'Invalid email or password'}), 401
+
+@auth_bp.route('/check-auth', methods=['GET'])
+def check_auth():
+    user_data = check_auth_status(session)
+    if user_data:
+        return jsonify({
+            'authenticated': True,
+            'user': user_data
+        }), 200
+    return jsonify({'authenticated': False}), 401
+
+
+@auth_bp.route('/logout', methods=['POST'])
+def logout():
+    session.clear()
+    return jsonify({'message': 'Logged out successfully'}), 200
