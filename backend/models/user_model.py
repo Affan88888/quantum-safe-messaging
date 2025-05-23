@@ -27,7 +27,6 @@ def create_user(username, email, password):
         cursor.close()
         connection.close()
 
-
 def get_user_by_email(email):
     """Retrieve a user from the database by email."""
     connection = get_db_connection()
@@ -51,7 +50,6 @@ def get_user_by_email_or_username(identifier):
     connection = get_db_connection()
     if not connection:
         return None
-
     try:
         cursor = connection.cursor(dictionary=True)
         query = "SELECT * FROM users WHERE email = %s OR username = %s"
@@ -63,7 +61,6 @@ def get_user_by_email_or_username(identifier):
     finally:
         cursor.close()
         connection.close()
-
 
 def get_user_by_id(user_id):
     """Retrieve a user from the database by ID."""
@@ -82,7 +79,6 @@ def get_user_by_id(user_id):
     finally:
         cursor.close()
         connection.close()
-
 
 def check_auth_status(session):
     """
@@ -114,3 +110,43 @@ def check_auth_status(session):
         return None  # Invalid session data or decryption failure
 
     return None
+
+def update_user_public_key(user_id, public_key_message_base64):
+    """
+    Updates the user's public key in the database.
+
+    Args:
+        user_id (int): The ID of the user.
+        public_key_message_base64 (str): The Base64-encoded public key for message encryption.
+
+    Returns:
+        bool: True if the update was successful, False otherwise.
+    """
+    connection = get_db_connection()  # Establish the database connection
+    if not connection:
+        print("Failed to connect to the database.")
+        return False
+
+    try:
+        cursor = connection.cursor(dictionary=True)
+        query = "UPDATE users SET public_key_message = %s WHERE id = %s"
+        cursor.execute(query, (public_key_message_base64, user_id))
+        
+        # Commit the transaction
+        connection.commit()
+        
+        # Check if any rows were affected by the update
+        if cursor.rowcount > 0:
+            return True
+        else:
+            print(f"No rows updated for user_id: {user_id}")
+            return False
+
+    except Exception as e:
+        print(f"Error updating public key: {e}")
+        connection.rollback()  # Rollback in case of error
+        return False
+
+    finally:
+        cursor.close()  # Close the cursor
+        connection.close()  # Close the connection

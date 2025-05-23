@@ -55,7 +55,24 @@ def create_database_and_table():
             else:
                 print("Column 'theme' already exists in table 'users'.")
 
-            # Step 7: Create the 'chats' table
+            # Step 7: Check if the 'public_key_message' column exists and add it if it doesn't
+            cursor.execute("""
+                SELECT COUNT(*) 
+                FROM information_schema.columns 
+                WHERE table_name = 'users' AND column_name = 'public_key_message';
+            """)
+            public_key_column_exists = cursor.fetchone()[0]
+
+            if not public_key_column_exists:
+                alter_users_table_query = """
+                ALTER TABLE users ADD COLUMN public_key_message BLOB;
+                """
+                cursor.execute(alter_users_table_query)
+                print("Column 'public_key_message' added to table 'users'.")
+            else:
+                print("Column 'public_key_message' already exists in table 'users'.")
+
+            # Step 8: Create the 'chats' table
             create_chats_table_query = """
             CREATE TABLE IF NOT EXISTS chats (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -66,7 +83,7 @@ def create_database_and_table():
             cursor.execute(create_chats_table_query)
             print("Table 'chats' created or already exists.")
 
-            # Step 8: Create the 'chat_participants' table
+            # Step 9: Create the 'chat_participants' table
             create_chat_participants_table_query = """
             CREATE TABLE IF NOT EXISTS chat_participants (
                 chat_id INT NOT NULL,
@@ -80,7 +97,7 @@ def create_database_and_table():
             cursor.execute(create_chat_participants_table_query)
             print("Table 'chat_participants' created or already exists.")
 
-            # Step 9: Create the 'messages' table
+            # Step 10: Create the 'messages' table
             create_messages_table_query = """
             CREATE TABLE IF NOT EXISTS messages (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -95,7 +112,7 @@ def create_database_and_table():
             cursor.execute(create_messages_table_query)
             print("Table 'messages' created or already exists.")
 
-            # Step 10: Create the 'user_contacts' table
+            # Step 11: Create the 'user_contacts' table
             create_user_contacts_table_query = """
             CREATE TABLE IF NOT EXISTS user_contacts (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -114,7 +131,7 @@ def create_database_and_table():
         print(f"Error: {e}")
 
     finally:
-        # Step 11: Close the cursor and connection
+        # Step 12: Close the cursor and connection
         if connection.is_connected():
             cursor.close()
             connection.close()
