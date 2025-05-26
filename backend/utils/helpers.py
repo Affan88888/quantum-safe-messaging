@@ -5,6 +5,7 @@ from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.backends import default_backend
 import base64
 import oqs
+from oqs import KeyEncapsulation
 import os
 
 def encrypt_data(key, plaintext):
@@ -107,3 +108,75 @@ def decrypt_session(session):
     except Exception as e:
         print(f"Error validating session: {e}")
         raise ValueError('Invalid session or authentication failed')
+    
+def encrypt_message(message, recipient_public_key):
+    """
+    Encrypts a message using the recipient's public key and quantum-safe shared secret generation.
+
+    Args:
+        message (str): The plaintext message to be encrypted.
+        recipient_public_key (bytes): The recipient's public key for encryption.
+
+    Returns:
+        dict: Encrypted message data including ciphertext and encapsulated key.
+    """
+    # Simulate the sender encapsulating the shared secret
+    kemalg = "ML-KEM-512"
+    with KeyEncapsulation(kemalg) as sender:
+        encapsulated_key, shared_secret_sender = sender.encap_secret(recipient_public_key)
+
+    # Use the shared secret as the message encryption key
+    message_key = shared_secret_sender[:32]
+    #print("Shared Secret (Encryption):", message_key)
+
+    # Encrypt the message using the message key
+    encrypted_message = encrypt_data(message_key, message)
+
+    # Return the encrypted message data
+    return {
+        'encrypted_message': base64.b64encode(encrypted_message).decode('utf-8'),
+        'encapsulated_key': base64.b64encode(encapsulated_key).decode('utf-8')
+    }
+
+def decrypt_message(encrypted_message_data, private_key_message):
+    """
+    Decrypts an encrypted message using the recipient's private key and encapsulated key.
+
+    Args:
+        encrypted_message_data (dict): A dictionary containing the encrypted message and encapsulated key.
+        private_key_message (bytes): The recipient's private key for decryption.
+
+    Returns:
+        str: The decrypted plaintext message.
+    """
+    # Step 1: Retrieve encrypted message data
+    encrypted_message = encrypted_message_data.get('encrypted_message')
+    encapsulated_key = encrypted_message_data.get('encapsulated_key')
+
+    # Ensure all required data is present
+    if not all([encrypted_message, encapsulated_key, private_key_message]):
+        raise ValueError('Missing required data for decryption')
+
+    try:
+        # Step 2: Decode Base64-encoded data
+        encrypted_message = base64.b64decode(encrypted_message)
+        encapsulated_key = base64.b64decode(encapsulated_key)
+
+        # Step 3: Decapsulate the shared secret
+        kemalg = "ML-KEM-512"
+        with KeyEncapsulation(kemalg, private_key_message) as recipient:
+            shared_secret = recipient.decap_secret(encapsulated_key)
+
+        # Step 4: Derive the message key
+        message_key = shared_secret[:32]
+        #print("Shared Secret (Decryption):", message_key)
+
+        # Step 5: Decrypt the message using the full encrypted_message
+        # The `decrypt_data` function will split `encrypted_message` into ciphertext and iv internally
+        decrypted_message = decrypt_data(message_key, encrypted_message)
+
+        return decrypted_message
+
+    except Exception as e:
+        print(f"Error decrypting message: {e}")
+        raise ValueError('Invalid message or decryption failed')

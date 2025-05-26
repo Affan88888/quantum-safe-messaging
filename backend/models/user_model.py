@@ -150,3 +150,123 @@ def update_user_public_key(user_id, public_key_message_base64):
     finally:
         cursor.close()  # Close the cursor
         connection.close()  # Close the connection
+
+def get_recipient_id_from_chat(chat_id, sender_id):
+    """
+    Retrieve the recipient's user ID from the chat participants.
+
+    Args:
+        chat_id (int): The ID of the chat.
+        sender_id (int): The ID of the sender (current user).
+
+    Returns:
+        int: The recipient's user ID, or None if the recipient cannot be determined.
+    """
+    connection = get_db_connection()
+    if not connection:
+        return None
+
+    try:
+        cursor = connection.cursor(dictionary=True)
+        # Query to fetch the participants of the chat
+        query = """
+        SELECT user_id FROM chat_participants WHERE chat_id = %s
+        """
+        cursor.execute(query, (chat_id,))
+        participants = cursor.fetchall()
+        print("Participants fetched from DB:", participants)
+
+        # Extract user IDs from the result and ensure they are integers
+        participant_ids = [int(participant['user_id']) for participant in participants]
+        print("Participant IDs extracted:", participant_ids)
+
+        # Validate the number of participants
+        if len(participant_ids) != 2:
+            print(f"Unexpected number of participants ({len(participant_ids)}) for chat_id {chat_id}")
+            return None
+
+        # Ensure sender_id is an integer
+        sender_id = int(sender_id)
+        print("Sender ID:", sender_id)
+
+        # Find the recipient ID by excluding the sender's ID
+        filtered_ids = [user_id for user_id in participant_ids if user_id != sender_id]
+        print("Filtered recipient IDs:", filtered_ids)
+
+        if len(filtered_ids) != 1:
+            print("Error: Unable to determine a unique recipient ID.")
+            return None
+
+        recipient_id = filtered_ids[0]
+        print("Recipient ID determined:", recipient_id)
+
+        return recipient_id
+
+    except Exception as e:
+        print(f"Error fetching recipient ID: {e}")
+        return None
+
+    finally:
+        cursor.close()
+        connection.close()
+
+def get_user_public_key(user_id):
+    """
+    Retrieve the public key of a user from the database.
+
+    Args:
+        user_id (int): The ID of the user.
+
+    Returns:
+        bytes: The user's public key, or None if it cannot be found.
+    """
+    connection = get_db_connection()
+    if not connection:
+        return None
+
+    try:
+        cursor = connection.cursor(dictionary=True)
+        # Query to fetch the public key of the user
+        query = "SELECT public_key_message FROM users WHERE id = %s"
+        cursor.execute(query, (user_id,))
+        result = cursor.fetchone()
+
+        if result and result['public_key_message']:
+            # Decode the Base64-encoded public key
+            return base64.b64decode(result['public_key_message'])
+
+        return None
+
+    except Exception as e:
+        print(f"Error fetching user public key: {e}")
+        return None
+
+    finally:
+        cursor.close()
+        connection.close()
+
+def get_recipient_id_from_chat_for_decryption(chat_id, user_id):
+    """
+    Retrieve the recipient's user ID from the chat participants.
+    Assumes a 1-on-1 chat where there are only two participants.
+    """
+    connection = get_db_connection()
+    if not connection:
+        return None
+
+    try:
+        cursor = connection.cursor(dictionary=True)
+        query = """
+        SELECT user_id
+        FROM chat_participants
+        WHERE chat_id = %s AND user_id != %s
+        """
+        cursor.execute(query, (chat_id, user_id))
+        result = cursor.fetchone()
+        return result['user_id'] if result else None
+    except Exception as e:
+        print(f"Error fetching recipient ID: {e}")
+        return None
+    finally:
+        cursor.close()
+        connection.close()

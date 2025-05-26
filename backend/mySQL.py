@@ -112,7 +112,42 @@ def create_database_and_table():
             cursor.execute(create_messages_table_query)
             print("Table 'messages' created or already exists.")
 
-            # Step 11: Create the 'user_contacts' table
+            # Step 11: Check and add ['encrypted_message', 'encapsulated_key'] columns
+            for column in ['encrypted_message', 'encapsulated_key']:
+                cursor.execute(f"""
+                    SELECT COUNT(*) 
+                    FROM information_schema.columns 
+                    WHERE table_name = 'messages' AND column_name = '{column}';
+                """)
+                column_exists = cursor.fetchone()[0]
+
+                if not column_exists:
+                    if column == 'encrypted_message':
+                        alter_query = "ALTER TABLE messages ADD COLUMN encrypted_message TEXT;"
+                    elif column == 'encapsulated_key':
+                        alter_query = "ALTER TABLE messages ADD COLUMN encapsulated_key TEXT;"
+
+                    cursor.execute(alter_query)
+                    print(f"Column '{column}' added to table 'messages'.")
+                else:
+                    print(f"Column '{column}' already exists in table 'messages'.")
+
+            # Step 12: Check if the 'content' column exists and drop it if it does
+            cursor.execute("""
+                SELECT COUNT(*) 
+                FROM information_schema.columns 
+                WHERE table_name = 'messages' AND column_name = 'content';
+            """)
+            content_column_exists = cursor.fetchone()[0]
+
+            if content_column_exists:
+                drop_content_column_query = "ALTER TABLE messages DROP COLUMN content;"
+                cursor.execute(drop_content_column_query)
+                print("Column 'content' dropped from table 'messages'.")
+            else:
+                print("Column 'content' does not exist in table 'messages'.")
+
+            # Step 13: Create the 'user_contacts' table
             create_user_contacts_table_query = """
             CREATE TABLE IF NOT EXISTS user_contacts (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -131,7 +166,7 @@ def create_database_and_table():
         print(f"Error: {e}")
 
     finally:
-        # Step 12: Close the cursor and connection
+        # Step 14: Close the cursor and connection
         if connection.is_connected():
             cursor.close()
             connection.close()

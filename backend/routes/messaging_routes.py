@@ -2,7 +2,8 @@ from flask import Blueprint, request, jsonify, session
 from flask_socketio import SocketIO, emit, join_room
 from models.messaging_model import save_message_to_db, get_chat_history_from_db
 from models.chats_model import get_chats_for_user
-from utils.helpers import decrypt_session
+from models.user_model import get_recipient_id_from_chat, get_user_public_key
+from utils.helpers import decrypt_session, encrypt_message
 from datetime import datetime
 
 # Create a Blueprint for messaging-related routes
@@ -36,7 +37,7 @@ def handle_connect():
 def handle_send_message(data):
     """
     Handle sending a message via WebSocket.
-    Save the message to the database and broadcast it to the chat participants.
+    Encrypt the message, save it to the database, and broadcast it to the chat participants.
     """
     try:
         # Retrieve sender's user ID from the session
@@ -50,18 +51,36 @@ def handle_send_message(data):
             emit('error', {'message': 'Chat ID and content are required.'})
             return
 
-        # Save the message to the database and retrieve the auto-generated ID
-        message_id = save_message_to_db(chat_id, sender_id, content)
+        # Fetch the recipient's public key from the database
+        recipient_id = get_recipient_id_from_chat(chat_id, sender_id)
+        if not recipient_id:
+            emit('error', {'message': 'Failed to determine the recipient.'})
+            return
+
+        recipient_public_key = get_user_public_key(recipient_id)
+        if not recipient_public_key:
+            emit('error', {'message': 'Recipient public key not found.'})
+            return
+
+        # Encrypt the message
+        encrypted_message_data = encrypt_message(content, recipient_public_key)
+
+        # Save the encrypted message to the database
+        message_id = save_message_to_db(
+            chat_id,
+            sender_id,
+            encrypted_message_data
+        )
         if not message_id:
             emit('error', {'message': 'Failed to save message to the database.'})
             return
 
-        # Broadcast the message to all participants in the chat
+        # Broadcast the encrypted message to all participants in the chat
         emit('receive_message', {
-            'id': message_id,  # Include the database-generated ID
+            'id': message_id,
             'chat_id': chat_id,
             'sender_id': sender_id,
-            'content': content,
+            'encrypted_message': encrypted_message_data,
             'timestamp': datetime.now().strftime('%I:%M %p')
         }, room=str(chat_id))  # Use chat_id as the room for broadcasting
 
