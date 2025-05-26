@@ -1,4 +1,3 @@
--napraviti da ne mozes sebe dodati u kontaktima
 -dodati profilne slike usera
 -updateati login i signup da traze password od minimum 8 znamenki
 -updateati login i signup da se error ne izbacuje kao popup gore
