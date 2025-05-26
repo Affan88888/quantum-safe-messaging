@@ -76,7 +76,7 @@ const ContactSidebar = ({ onAddContact, onStartChat, isDarkMode }) => {
 
         closeModal();
       } else {
-        setErrorMessage('User with this email does not exist.');
+        setErrorMessage(data.message);
       }
     } catch (error) {
       console.error('Error checking email:', error);
