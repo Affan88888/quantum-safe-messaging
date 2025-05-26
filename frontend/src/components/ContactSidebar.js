@@ -205,6 +205,11 @@ const handleChat = async (contactId, contactName) => {
               value={newContactEmail}
               onChange={(e) => setNewContactEmail(e.target.value)}
               placeholder="Enter contact email"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleAddContact(); // Trigger the "Add" action on Enter key press
+                }
+              }}
             />
             {errorMessage && <h5 className="error-message">{errorMessage}</h5>}
             <div className="modal-buttons">
