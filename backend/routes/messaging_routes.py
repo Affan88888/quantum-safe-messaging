@@ -80,7 +80,7 @@ def handle_send_message(data):
             'id': message_id,
             'chat_id': chat_id,
             'sender_id': sender_id,
-            'encrypted_message': encrypted_message_data,
+            'content': content,
             'timestamp': datetime.now().strftime('%I:%M %p')
         }, room=str(chat_id))  # Use chat_id as the room for broadcasting
 
