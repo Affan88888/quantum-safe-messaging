@@ -3,6 +3,7 @@ import base64
 from dotenv import dotenv_values
 from pathlib import Path
 from utils.helpers import decrypt_message
+from models.user_model import get_recipient_id_from_chat_for_decryption
 
 def get_chats_for_user(user_id):
     """
@@ -22,6 +23,7 @@ def get_chats_for_user(user_id):
         SELECT 
             c.id AS id,
             u.username AS name, -- Get the name of the other participant
+            m.sender_id AS sender_id, -- Add sender_id to determine who sent the message
             m.encrypted_message AS encrypted_message, -- Combined ciphertext and IV
             m.encapsulated_key AS encapsulated_key,
             m.created_at AS timestamp
@@ -38,14 +40,14 @@ def get_chats_for_user(user_id):
         WHERE 
             cp1.user_id = %s
         GROUP BY 
-            c.id, u.username, m.encrypted_message, m.encapsulated_key, m.created_at
+            c.id, u.username, m.sender_id, m.encrypted_message, m.encapsulated_key, m.created_at
         ORDER BY 
             MAX(m.created_at) DESC;
         """
 
         cursor.execute(query, (user_id,))
         raw_chats = cursor.fetchall()  # Fetch all matching chats
-        #print("raw_chats: ", raw_chats)
+        print("Raw chats:", raw_chats)
 
         # Fetch the private key for decryption
         private_keys_dir = Path("private_keys")
@@ -58,7 +60,18 @@ def get_chats_for_user(user_id):
         if not private_key_base64:
             raise ValueError(f"Private key not found in .env file for user {user_id}")
 
-        private_key_message = base64.b64decode(private_key_base64)
+        current_user_private_key = base64.b64decode(private_key_base64)
+
+        # Helper function to fetch a private key
+        def fetch_private_key(user_id_to_fetch):
+            env_file_path = private_keys_dir / f"user_{user_id_to_fetch}.env"
+            if not env_file_path.exists():
+                raise ValueError(f"Private key file not found for user {user_id_to_fetch}")
+            env_vars = dotenv_values(env_file_path)
+            private_key_base64 = env_vars.get(f"PRIVATE_KEY_USER_{user_id_to_fetch}")
+            if not private_key_base64:
+                raise ValueError(f"Private key not found in .env file for user {user_id_to_fetch}")
+            return base64.b64decode(private_key_base64)
 
         # Post-process the results to decrypt the latest message for each chat
         chats_with_last_message = []
@@ -84,9 +97,24 @@ def get_chats_for_user(user_id):
                         'encapsulated_key': chat['encapsulated_key']
                     }
 
+                    # Determine if the current user is the sender or recipient
+                    sender_id = int(chat['sender_id'])
+                    current_user_id = int(user_id)
+
+                    if sender_id == current_user_id:
+                        # Current user is the sender; use the recipient's private key
+                        recipient_id = get_recipient_id_from_chat_for_decryption(chat['id'], user_id)
+                        print("RECIPIENT ID CHANGED")
+                        if not recipient_id:
+                            raise ValueError("Recipient ID could not be determined.")
+                        private_key_to_use = fetch_private_key(recipient_id)
+                    else:
+                        # Current user is the recipient; use their own private key
+                        private_key_to_use = current_user_private_key
+
                     # Decrypt the message
                     try:
-                        decrypted_content = decrypt_message(encrypted_message_data, private_key_message)
+                        decrypted_content = decrypt_message(encrypted_message_data, private_key_to_use)
                     except Exception as e:
                         print(f"Failed to decrypt message for chat ID {chat['id']}: {e}")
                         decrypted_content = "[Decryption failed]"
