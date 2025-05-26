@@ -80,7 +80,7 @@ def get_chats_for_user(user_id):
             if chat['id'] not in seen_chat_ids:
                 # Check if encrypted_message and encapsulated_key are None
                 if chat['encrypted_message'] is None or chat['encapsulated_key'] is None:
-                    decrypted_content = "[No messages yet]"
+                    decrypted_content = "(No messages yet)"
                 else:
                     # Decode the Base64-encoded encrypted_message
                     try:
@@ -122,7 +122,7 @@ def get_chats_for_user(user_id):
                     'id': chat['id'],
                     'name': chat['name'],  # Name of the other participant
                     'last_message': decrypted_content,
-                    'timestamp': chat['timestamp'] or "No timestamp available"
+                    'timestamp': chat['timestamp']
                 })
 
                 seen_chat_ids.add(chat['id'])
