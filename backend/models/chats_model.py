@@ -47,7 +47,6 @@ def get_chats_for_user(user_id):
 
         cursor.execute(query, (user_id,))
         raw_chats = cursor.fetchall()  # Fetch all matching chats
-        print("Raw chats:", raw_chats)
 
         # Fetch the private key for decryption
         private_keys_dir = Path("private_keys")
@@ -104,7 +103,6 @@ def get_chats_for_user(user_id):
                     if sender_id == current_user_id:
                         # Current user is the sender; use the recipient's private key
                         recipient_id = get_recipient_id_from_chat_for_decryption(chat['id'], user_id)
-                        print("RECIPIENT ID CHANGED")
                         if not recipient_id:
                             raise ValueError("Recipient ID could not be determined.")
                         private_key_to_use = fetch_private_key(recipient_id)

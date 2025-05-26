@@ -174,11 +174,9 @@ def get_recipient_id_from_chat(chat_id, sender_id):
         """
         cursor.execute(query, (chat_id,))
         participants = cursor.fetchall()
-        print("Participants fetched from DB:", participants)
 
         # Extract user IDs from the result and ensure they are integers
         participant_ids = [int(participant['user_id']) for participant in participants]
-        print("Participant IDs extracted:", participant_ids)
 
         # Validate the number of participants
         if len(participant_ids) != 2:
@@ -187,18 +185,15 @@ def get_recipient_id_from_chat(chat_id, sender_id):
 
         # Ensure sender_id is an integer
         sender_id = int(sender_id)
-        print("Sender ID:", sender_id)
 
         # Find the recipient ID by excluding the sender's ID
         filtered_ids = [user_id for user_id in participant_ids if user_id != sender_id]
-        print("Filtered recipient IDs:", filtered_ids)
 
         if len(filtered_ids) != 1:
             print("Error: Unable to determine a unique recipient ID.")
             return None
 
         recipient_id = filtered_ids[0]
-        print("Recipient ID determined:", recipient_id)
 
         return recipient_id
 

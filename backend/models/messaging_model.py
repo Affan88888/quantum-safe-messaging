@@ -76,8 +76,6 @@ def get_chat_history_from_db(user_id, chat_id):
         """
         cursor.execute(query, (chat_id,))
         raw_messages = cursor.fetchall()
-        print("Raw messages:", raw_messages)
-        print("User ID:", user_id)
 
         # Fetch the private key for decryption
         private_keys_dir = Path("private_keys")
@@ -117,7 +115,6 @@ def get_chat_history_from_db(user_id, chat_id):
                 if sender_id == current_user_id:
                     # Current user is the sender; use the recipient's private key
                     recipient_id = get_recipient_id_from_chat_for_decryption(chat_id, user_id)
-                    print("RECIPIENT ID CHANGED")
                     if not recipient_id:
                         raise ValueError("Recipient ID could not be determined.")
                     private_key_to_use = fetch_private_key(recipient_id)

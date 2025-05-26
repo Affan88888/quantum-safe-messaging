@@ -169,10 +169,8 @@ def decrypt_message(encrypted_message_data, private_key_message):
 
         # Step 4: Derive the message key
         message_key = shared_secret[:32]
-        #print("Shared Secret (Decryption):", message_key)
 
         # Step 5: Decrypt the message using the full encrypted_message
-        # The `decrypt_data` function will split `encrypted_message` into ciphertext and iv internally
         decrypted_message = decrypt_data(message_key, encrypted_message)
 
         return decrypted_message
