@@ -29,3 +29,6 @@ backend/.env
 
 # Ignore .DS_Store
 .DS_Store
+
+# Ignore all .env files in the private_keys folder
+backend/private_keys/*.env
