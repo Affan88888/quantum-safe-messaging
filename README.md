@@ -3,21 +3,24 @@
 A quantum-safe web application for secure messaging, leveraging post-quantum cryptographic algorithms to ensure future-proof security.
 
 ## Features
-- Quantum-Safe Encryption : End-to-end encryption using quantum-safe algorithms (e.g., CRYSTALS-Kyber for key exchange and CRYSTALS-Dilithium for digital signatures).
-- Message Encryption : Messages are encrypted using quantum-safe algorithms before being stored or transmitted.
-- Session Encryption : Sessions are encrypted using quantum-safe algorithms to ensure secure communication between the client and server.
-- Scalable Architecture : Reverse proxying via HAProxy and hosting on a Python Flask server for secure and efficient traffic handling.
-- Database Integration : Secure storage of user data and messages in a MySQL database.
+- **Quantum-Safe Encryption** : End-to-end encryption using quantum-safe algorithms (e.g., CRYSTALS-Kyber for key exchange and CRYSTALS-Dilithium for digital signatures).
+- **Message Encryption** : Messages are encrypted using quantum-safe algorithms before being stored or transmitted.
+- **Session Encryption** : Sessions are encrypted using quantum-safe algorithms to ensure secure communication between the client and server.
+- **Instant Messaging** : Real-time messaging functionality powered by **WebSockets** , enabling seamless and instant communication between users.
+- **Scalable Architecture** : Reverse proxying via HAProxy and hosting on a Python Flask server for secure and efficient traffic handling.
+- **Database Integration** : Secure storage of user data and messages in a MySQL database.
 
 ## Technologies
-- Frontend : React.js
-- Backend : Flask (Python)
-- Database : MySQL
-- Quantum-Safe Cryptography : OpenSSL 3.x with Open Quantum Safe (OQS) provider
-- Web Servers :
+- **Frontend** : React.js
+- **Backend** : Flask (Python)
+- **Database** : MySQL
+- **Quantum-Safe Cryptography** : OpenSSL 3.x with Open Quantum Safe (OQS) provider
+- **Web Servers** :
     - HAProxy: For SSL termination and load balancing.
-- Post-Quantum Algorithms : CRYSTALS-Kyber (Key Encapsulation Mechanism) and CRYSTALS-Dilithium (Digital Signature Algorithm).
-
+- **Post-Quantum Algorithms** :
+    - CRYSTALS-Kyber (Key Encapsulation Mechanism)
+    - CRYSTALS-Dilithium (Digital Signature Algorithm).
+- **Real-Time Communication** : WebSockets for instant messaging functionality.
 ## Installation
 1. Follow these tutorials to install quantum-safe OpenSSL and other dependencies:
     - [Quantum-Safe OpenSSL Tutorial](https://developer.ibm.com/tutorials/awb-quantum-safe-openssl/)
