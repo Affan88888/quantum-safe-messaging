@@ -1,12 +1,22 @@
-from werkzeug.security import generate_password_hash, check_password_hash
 from utils.db import get_db_connection
 from utils.helpers import decrypt_session
+from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError
 import base64
 import oqs
 
 def create_user(username, email, password):
-    """Create a new user in the database."""
-    password_hash = generate_password_hash(password)
+    """Create a new user in the database using Argon2 for password hashing."""
+    
+    ph = PasswordHasher() # Initialize Argon2 PasswordHasher
+
+    # Hash the password using Argon2
+    try:
+        password_hash = ph.hash(password)
+    except Exception as e:
+        print(f"Error hashing password: {e}")
+        return False
+
     connection = get_db_connection()
     if not connection:
         return False

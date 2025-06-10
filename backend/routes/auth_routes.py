@@ -1,7 +1,8 @@
 from flask import Blueprint, request, jsonify, session
 from models.user_model import create_user, get_user_by_email, get_user_by_email_or_username, check_auth_status, update_user_public_key
 from utils.helpers import encrypt_session
-from werkzeug.security import check_password_hash
+from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError, InvalidHash
 import oqs
 import os
 from pathlib import Path
@@ -81,12 +82,21 @@ def login():
     identifier = data.get('email')  # from frontend, can be username or email
     password = data.get('password')
 
+    ph = PasswordHasher() # Initialize Argon2 PasswordHasher
+
     if not all([identifier, password]):
         return jsonify({'error': 'Username/email and password are required'}), 400
 
     user = get_user_by_email_or_username(identifier)
 
-    if user and check_password_hash(user['password_hash'], password):
+    if not user:
+        return jsonify({'error': 'Invalid email or password'}), 401
+
+    try:
+        # Verify the password using Argon2
+        ph.verify(user['password_hash'], password)
+
+        # If verification is successful, proceed with login
         # Generate the client's key pair
         kemalg = "ML-KEM-512"
         with oqs.KeyEncapsulation(kemalg) as client:
@@ -111,9 +121,14 @@ def login():
                 'theme': user['theme']  # Include the theme property
             }
         }), 200
-    else:
+
+    except VerifyMismatchError:
+        # Password does not match the hash
         return jsonify({'error': 'Invalid email or password'}), 401
 
+    except InvalidHash:
+        # The stored hash is not in a valid format (e.g., if it was created with a different algorithm)
+        return jsonify({'error': 'Invalid hash format. Please contact support.'}), 500
 
 @auth_bp.route('/check-auth', methods=['GET'])
 def check_auth():
