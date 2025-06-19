@@ -49,8 +49,8 @@ const HomePage = () => {
             </div>
             <div className="features-card">
               <div className="feature-icon">⚡</div>
-              <h3>Fast and reliable communication</h3>
-              <p>nemam idejeeeee treba nesto napisati ovdjee</p>
+              <h3>Fast and Reliable Communication</h3>
+              <p>Real-time messaging with low latency, ensuring instant and reliable communication between users.</p>
             </div>
             <div className="features-card">
               <div className="feature-icon">🛡️</div>
