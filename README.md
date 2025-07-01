@@ -2,7 +2,7 @@
 
 A quantum-safe web application for secure messaging, leveraging post-quantum cryptographic algorithms to ensure future-proof security.
 
-## Features
+## 🚀 Features
 - **Quantum-Safe Encryption** : End-to-end encryption using quantum-safe algorithms (e.g., CRYSTALS-Kyber for key exchange and CRYSTALS-Dilithium for digital signatures).
 - **Message Encryption** : Messages are encrypted using quantum-safe algorithms before being stored or transmitted.
 - **Session Encryption** : Sessions are encrypted using quantum-safe algorithms to ensure secure communication between the client and server.
@@ -10,7 +10,7 @@ A quantum-safe web application for secure messaging, leveraging post-quantum cry
 - **Scalable Architecture** : Reverse proxying via HAProxy and hosting on a Python Flask server for secure and efficient traffic handling.
 - **Database Integration** : Secure storage of user data and messages in a MySQL database.
 
-## Technologies
+## 💡 Technologies
 - **Frontend** : React.js
 - **Backend** : Flask (Python)
 - **Database** : MySQL
@@ -21,7 +21,8 @@ A quantum-safe web application for secure messaging, leveraging post-quantum cry
     - CRYSTALS-Kyber (Key Encapsulation Mechanism)
     - CRYSTALS-Dilithium (Digital Signature Algorithm).
 - **Real-Time Communication** : WebSockets for instant messaging functionality.
-## Installation
+
+## 🛠️ Installation
 1. Follow these tutorials to install quantum-safe OpenSSL and other dependencies:
     - [Quantum-Safe OpenSSL Tutorial](https://developer.ibm.com/tutorials/awb-quantum-safe-openssl/)
     - [Building Quantum-Safe Web Applications](https://developer.ibm.com/tutorials/awb-building-quantum-safe-web-applications/)
@@ -33,3 +34,16 @@ A quantum-safe web application for secure messaging, leveraging post-quantum cry
 7. Build HAProxy with quantum-safe OpenSSL, copy the server certificates to the certs directory, and configure HAProxy to forward traffic to the Flask backend. Start HAProxy after completing the configuration.
 8. Set up the MySQL database and ensure the backend application can connect to it. Update the database connection settings in the backend configuration if needed. Then run `python mySQL.py` in \backend.
 9. Start the development server: `npm start` in \frontend and `python app.py` in \backend.
+
+## 📷 App Screenshots
+<div align="center">
+  <img src="screenshots/home_page" width="700" alt="Home Page">
+  <img src="screenshots/dark_mode" width="700" alt="Dark Mode">
+  <img src="screenshots/light_mode" width="700" alt="Light Mode">
+  <img src="screenshots/adding_contact" width="700" alt="Adding Contact">
+</div>
+
+## 🗃️ Database Schema
+<div align="center">
+  <img src="screenshots/db_scheme" width="700" alt="Database Scheme">
+</div>
