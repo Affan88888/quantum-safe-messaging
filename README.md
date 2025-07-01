@@ -37,13 +37,13 @@ A quantum-safe web application for secure messaging, leveraging post-quantum cry
 
 ## 📷 App Screenshots
 <div align="center">
-  <img src="screenshots/home_page" width="700" alt="Home Page">
-  <img src="screenshots/dark_mode" width="700" alt="Dark Mode">
-  <img src="screenshots/light_mode" width="700" alt="Light Mode">
-  <img src="screenshots/adding_contact" width="700" alt="Adding Contact">
+  <img src="screenshots/home_page.png" width="700" alt="Home Page">
+  <img src="screenshots/dark_mode.png" width="700" alt="Dark Mode">
+  <img src="screenshots/light_mode.png" width="700" alt="Light Mode">
+  <img src="screenshots/adding_contact.png" width="700" alt="Adding Contact">
 </div>
 
 ## 🗃️ Database Schema
 <div align="center">
-  <img src="screenshots/db_scheme" width="700" alt="Database Scheme">
+  <img src="screenshots/db_scheme.png" width="700" alt="Database Scheme">
 </div>
